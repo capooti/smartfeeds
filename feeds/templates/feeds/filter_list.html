@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load pagination_tags %}
+
+{% block head %}
+<link type="text/css" href="{{ STATIC_URL}}css/geofeeds.css" rel="stylesheet" /> 
+<script type="text/javascript" src="{{ STATIC_URL}}js/geofeeds.js"></script>
+{% endblock %}
+
+{% block nav-filters %}<li class="current_page_item"><a href="{% url filters %}">Items</a></li>{% endblock %}
+
+{% block content %}
+    <!-- form to filter -->
+    <form name="filter-form" action="" method="post">
+        {{ form }}
+        <!-- submit -->
+        <input type="submit" name='submit-filter' value="Filter" style='width: 80px;' />     
+    </form>
+    <!-- end of form -->
+{% endblock %}

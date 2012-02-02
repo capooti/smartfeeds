@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Items for domain {{ domain.name }}{% endblock %}
+
+{% block content %}
+
+    <p>{{ domain.name }}
+     (<img src="{{ STATIC_URL }}images/flags/{{ domain.country.iso2|lower }}.gif" alt="{{ domain.country.name }}" /> {{ domain.country.name }})
+     published {{ domain.item_set.all.count }} items:
+    <!-- item list -->
+    <ul>
+    {% for item in domain.item_set.all %}
+        <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

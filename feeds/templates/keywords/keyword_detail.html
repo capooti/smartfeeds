@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Items for keyword {{ keyword.name }}{% endblock %}
+
+{% block content %}
+
+    <!-- item list -->
+    <ul>
+    {% for item in keyword.item.all %}
+        <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

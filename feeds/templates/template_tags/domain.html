@@ -1,0 +1,7 @@
+<!-- Country code domain -->
+{% load static %}
+
+{% if item.domain.country %}
+    Domain: {{ item.domain.name }}
+     (<img src="{% get_static_prefix %}images/flags/{{ item.domain.country.iso2|lower }}.gif" alt="{{ item.domain.country.name }}" /> {{ item.domain.country.name }}) 
+{% endif %}

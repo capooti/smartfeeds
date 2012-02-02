@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load pagination_tags %}
+{% load tags %}
+
+{% block title %}Places list{% endblock %}
+
+{% block content %}
+ 
+{% autopaginate places 10 %}
+    {% paginate %}
+        <ul>
+        {% for place in places %}
+            <li><a href="{% url place-detail place.slug %}">{{ place.name }}</a>
+             apperas in {{ place.item.all.count }} items</li>
+        {% endfor %}
+        </ul>
+    {% paginate %}
+
+{% endblock %}

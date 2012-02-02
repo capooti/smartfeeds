@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block title %}Details for item {{ item.title }}{% endblock %}
+
+{% block content %}
+
+    <!-- item detail -->
+    <ul>
+        <li>Update: {{ item.updated }}</li>
+        <li>Title: {{ item.title }}</li>
+        <li>Feed: {{ item.feed.name }}</li>
+        <li><a href="{{ item.link }}">Link</a></li>
+    </ul>
+    
+    <!-- places list -->
+    {% show_places item %}
+    
+    <!-- people list -->
+    {% show_people_long item %}
+    
+    <!-- keyword list -->
+    {% show_keywords_long item %}
+    
+    <!-- images list -->
+    {% show_images_long item %}
+    
+    <!-- domain -->
+    {% show_domain item %}
+    
+    <!-- tags -->
+    {% show_tags item %}
+    
+{% endblock %}
+

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Items for person {{ person.full_name }}{% endblock %}
+
+{% block content %}
+
+    <p>{{ person.full_name }} apperars on {{ person.item.all.count }} items:
+    <!-- item list -->
+    <ul>
+    {% for item in person.item.all %}
+        <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

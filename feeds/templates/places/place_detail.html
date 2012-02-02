@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load tags %}
+
+{% block media %}
+    
+{% endblock %}
+
+{% block title %}Items for place {{ place.name }}{% endblock %}
+
+{% block content %}
+
+    <!-- map -->
+    {% show_map place %}
+    
+    <!-- item list -->
+    <ul>
+    {% for item in place.item.all %}
+        <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
+    {% endfor %}
+    </ul>
+    
+{% endblock %}

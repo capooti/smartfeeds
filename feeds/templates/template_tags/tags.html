@@ -1,0 +1,7 @@
+<!-- tags -->
+<br />Tagged as:
+{% if tags %}
+    {% for tag in tags %}
+        <a href="{% url tag-detail tag.slug %}">{{ tag.name }}</a>
+    {% endfor %}
+{% endif %}

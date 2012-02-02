@@ -1,0 +1,11 @@
+<!-- people long list -->
+{% if people %}
+    This news may refer to the following people:
+    <ul>
+    {% for person in people %}
+    <li>
+        <a href="{% url person-detail person.slug %}">{{ person.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

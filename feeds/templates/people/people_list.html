@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load pagination_tags %}
+{% load tags %}
+
+{% block title %}People list{% endblock %}
+
+{% block content %}
+ 
+{% autopaginate people 10 %}
+    {% paginate %}
+        <ul>
+        {% for person in people %}
+            <li><a href="{% url person-detail person.slug %}">{{ person.full_name }}</a>
+             apperas in {{ person.item.all.count }} items</li>
+        {% endfor %}
+        </ul>
+    {% paginate %}
+
+{% endblock %}

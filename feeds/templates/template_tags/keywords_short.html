@@ -1,0 +1,8 @@
+<!-- keywords short list -->
+{% if keywords %}
+    This news may refer to the following keywords:
+    {% for keyword in keywords %}
+        <a href="{% url keyword-detail keyword.name %}">{{ keyword.name }}</a>
+    {% endfor %}
+    <br />
+{% endif %}

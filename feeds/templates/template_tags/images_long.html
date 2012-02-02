@@ -1,0 +1,11 @@
+<!-- images long list -->
+{% if images %}
+    This news contains the following images:
+    <ul>
+    {% for image in images %}
+    <li>
+        <img src="{{ image.src }}" />
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

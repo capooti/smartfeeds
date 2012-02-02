@@ -1,0 +1,10 @@
+# ignore pyc files
+*.pyc
+# ignore virtualenv
+smartfeeds_env
+# ignore settings.py files
+settings.py
+# ignore data directory
+data
+# ignore project static directory
+static

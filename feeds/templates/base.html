@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>
+        <title>The GeoFeeds Web Application</title>
+        <link type="text/css" href="{{ STATIC_URL }}css/feeds.css" rel="stylesheet" />
+        {% block media %}{% endblock %}
+    </head>
+
+    <body>
+        
+        <h1><a href="{% url items-list %}">Sm@rtFeeds</a></h1>
+        
+        <div id="menu">
+            <a href="{% url items-list %}">Home</a></li>
+            <a href="">Tags</a></li>
+            <a href="{% url places-list %}">Places</a></li>
+            <a href="{% url people-list %}">People</a></li>
+            <a href="">Keywords</a></li>
+            <a href="{% url domains-list %}">Domains</a></li>
+        </div>
+        
+        <div id="page">
+            <div id="title">
+                <h2>{% block title %}{% endblock %}</h2>
+            </div>
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        
+        <div id="footer">
+          <hr />
+          Powered by <a href="https://github.com/capooti/smartfeeds">Sm@rtFeeds</a>, 
+          by <a href="http://paolocorti.net/">capooti</a> - ©2011,2012
+        </div>
+        
+    </body>
+</html>
+

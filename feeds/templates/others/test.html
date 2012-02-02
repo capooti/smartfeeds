@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<html>
+<head>
+<title>layer OSM </title>
+ 
+<script  type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript">
+var map = new OpenLayers.Map('map');
+function init() {
+    var map = new OpenLayers.Map('map');
+    var wms = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+    "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
+    map.addLayer(wms);
+    map.zoomToMaxExtent();
+}
+</script>
+
+    </head>
+
+    <body onload="init();">
+        
+        <h1><a href="/feeds/items">Sm@rtFeeds</a></h1>
+        
+        <div id="menu">
+            <a href="/feeds/items">Home</a></li>
+        </div>
+        
+        <div style="width:100%; height:95%" id='map' ></div>
+        
+        <div id="page">
+            <div id="title">
+                <h2>Items for place Milan, Lombardy, IT</h2>
+            </div>
+            <div id="content">
+                
+
+    <!-- map -->
+    
+    
+    <!-- item list -->
+    <ul>
+    
+        <li>Dec. 1, 2011, 1:14 p.m. - <a href="/feeds/item/2696/detail">Stupro di gruppo in stazione branco di ragazzini abusa di 16enne</a></li>
+    
+        <li>Dec. 1, 2011, 1:07 p.m. - <a href="/feeds/item/2698/detail">Claudia Pandolfi in versione punk nel nuovo film di Carlo Virzì</a></li>
+    
+        <li>Dec. 1, 2011, 12:29 p.m. - <a href="/feeds/item/2700/detail">Milan, Tevez e Maxi Lopez La Juve punta Montolivo</a></li>
+    
+        <li>Dec. 1, 2011, 12:14 p.m. - <a href="/feeds/item/2701/detail">I Casalesi volevano uccidere magistrati e carabinieri</a></li>
+    
+        <li>Dec. 1, 2011, 11:17 a.m. - <a href="/feeds/item/2704/detail">Milano, ripartirà da zero il processo per la pentita che fu sciolta nell&#39;acido</a></li>
+    
+        <li>Dec. 1, 2011, 10:58 a.m. - <a href="/feeds/item/2706/detail">Rifiuti, scontro sui soldati Lepore e de Magistris: non servono</a></li>
+    
+        <li>Dec. 1, 2011, 10:37 a.m. - <a href="/feeds/item/2708/detail">Lampedusa, il racconto degli orrori a bordo &quot;Donna incinta e bimbo gettati in mare vivi&quot;</a></li>
+    
+        <li>Dec. 1, 2011, 9:52 a.m. - <a href="/feeds/item/2715/detail">Pubblicità comparativa, é guerra tra Plasmon e Barilla</a></li>
+    
+    </ul>
+    
+
+            </div>
+        </div>
+        
+        <div id="footer">
+          <hr />
+          Sm@rtFeeds, by Paolo Corti - ©2011
+        </div>
+        
+    </body>
+</html>

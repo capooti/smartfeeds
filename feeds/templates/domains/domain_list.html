@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load pagination_tags %}
+{% load tags %}
+
+{% block title %}Domain list{% endblock %}
+
+{% block content %}
+ 
+{% autopaginate domains 10 %}
+    {% paginate %}
+        <ul>
+        {% for domain in domains %}
+            <li><a href="{% url domain-detail domain.id %}">{{ domain.name }}</a>
+             (<img src="{{ STATIC_URL }}images/flags/{{ domain.country.iso2|lower }}.gif" alt="{{ domain.country.name }}" /> {{ domain.country.name }})
+             published {{ domain.item_set.all.count }} items</li>
+        {% endfor %}
+        </ul>
+    {% paginate %}
+
+{% endblock %}
