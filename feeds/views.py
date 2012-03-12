@@ -147,7 +147,7 @@ def items_list(request):
     # archived and unarchive items count
     archived_count = items.filter(archived=True).count()
 
-    return render_to_response('feeds/item_list.html', 
+    return render_to_response('items/item_list.html', 
         {   'feeds' : feeds,
             'items' : items,
             'feedclass': feedclass,

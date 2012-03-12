@@ -7,7 +7,7 @@
     {% for place in places %}
         <li>
             {% if place.country %}
-                <img src="{% get_static_prefix %}images/flags/{{ place.country.iso2|lower }}.gif" alt="{{ place.country }}" />
+                <img src="{% get_static_prefix %}images/flags/{{ place.country.iso2|lower }}.gif" alt="{{ place.country }}"  title="{{ place.country }}" />
             {% endif %}
          <a href="{% url place-detail place.slug %}">{{ place.name }}</a>
          {% if place.country %} ({{ place.country }}) {% endif %}
