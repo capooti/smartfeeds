@@ -28,6 +28,7 @@ from django.contrib.gis.utils import GeoIP
 from feeds.models import (Feed, Item, Place, Filter, Country, Person, Keyword, 
     Image, Domain)
 from feeds.utils.placemaker import placemaker
+import settings
 # externals
 import feedparser
 from taggit.models import Tag
@@ -53,16 +54,11 @@ class Command(BaseCommand):
             #self.stdout.write('An error as occourred storing the feeds.\n')
 
     def loadfeeds(self):
-        # first let's remove old (>30 days) items
-        self.stdout.write('\n***Removing old items')
-        firstday = datetime.date.today()-datetime.timedelta(days=int(60))
-        # Item.objects.filter(updated__lte=firstday).delete()
-        Item.objects.all().delete()
+        # for now I keep this utility command very basic, much more refactoring in future
         # now we start sorting the feeds
         feeds = Feed.objects.all().filter(enabled=True)
         for feed in feeds:
             self.stdout.write('\n***Parsing feed %s' % feed.name.encode('utf-8'))
-
             feed_parsed = feedparser.parse(feed.url_xml)
             for item_parsed in feed_parsed.entries:
                 biased_link = item_parsed.link
@@ -185,6 +181,11 @@ class Command(BaseCommand):
                         # add the item to the place
                         #import ipdb;ipdb.set_trace()
                         place.item.add(item)
+                        
+        # finally let's remove old items
+        self.stdout.write('\n***Removing old items')
+        firstday = datetime.date.today()-datetime.timedelta(days=int(settings.DAYS_TO_KEEP))
+        Item.objects.filter(updated__lte=firstday).delete()
 
 
 
