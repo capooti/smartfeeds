@@ -67,11 +67,18 @@ def show_tags(item):
         'tags': tags,
     }
     
-@register.inclusion_tag('template_tags/show_map.html')
+@register.inclusion_tag('template_tags/show_place_map.html')
 def show_map(place):
     return {
         'place': place,
-        'google_api_key': settings.GOOGLE_API_KEY
+        'cloudmade_api_key': settings.CLOUDMADE_API_KEY
+    }
+    
+@register.inclusion_tag('template_tags/show_places_map.html')
+def show_places_map(places):
+    return {
+        'places': places,
+        'cloudmade_api_key': settings.CLOUDMADE_API_KEY
     }
     
     

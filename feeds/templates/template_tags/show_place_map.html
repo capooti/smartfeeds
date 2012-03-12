@@ -1,0 +1,28 @@
+<!-- Place map -->
+{% load static %}
+
+<div id="map" style="height: 400px; width: 600px"></div>
+
+<link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
+<![endif]-->
+<script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
+
+<script>
+    var map = new L.Map('map');
+    var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/{{ cloudmade_api_key }}/997/256/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    });
+    
+    // initial extent and zoom
+    var latlon_init = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
+    map.setView(latlon_init, 13).addLayer(cloudmade);
+    
+    // let's add the marker
+    var marker = new L.Marker(latlon_init);
+    map.addLayer(marker);
+    marker.bindPopup("<b>{{ place.name }}</b>");
+
+</script>

@@ -2,7 +2,7 @@
 #******************************************************************************
 #  $Id$
 # 
-#  Project:  GeoFeeds
+#  Project:  Sm@rtFeeds
 #  Purpose:  Utility commands for the feeds application
 #  Author:   Paolo Corti, paolo.corti@jrc.ec.europa.eu
 # 
@@ -140,20 +140,24 @@ class Command(BaseCommand):
                     soup = bs(item.summary)
                     parsed = list(item.summary)
                     for img in soup.findAll("img"):
+                        print img
                         alt = ''
-                        if img.has_key('alt'):
-                            alt = img["alt"]
-                        if img["src"].lower().startswith("http"):
-                            src = img["src"]
+                        if img.has_key('src'):
+                            if img.has_key('alt'):
+                                alt = img["alt"]
+                            if img["src"].lower().startswith("http"):
+                                #import ipdb;ipdb.set_trace()
+                                src = img["src"]
+                            else:
+                                # TODO src extraction from relative url
+                                src = urlparse.urlunparse(parsed)
                             print src
                             image = Image()
                             image.src = src
                             image.alt = alt
                             image.item = item
                             image.save()
-                        else:
-                            # TODO src extraction from relative url
-                            src = urlparse.urlunparse(parsed)
+                            
                     # 4. tags
                     tags = Tag.objects.all()
                     for tag in tags:

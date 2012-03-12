@@ -3,6 +3,15 @@
 
 {% block title %}Details for item {{ item.title }}{% endblock %}
 
+{% block media %}
+    <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
+    
+{% endblock %}
+
 {% block content %}
 
     <!-- item detail -->
@@ -30,6 +39,9 @@
     
     <!-- tags -->
     {% show_tags item %}
+    
+    <!-- map -->
+    {% show_places_map item.place_set.all %}
     
 {% endblock %}
 
