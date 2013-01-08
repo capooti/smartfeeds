@@ -3,7 +3,7 @@ from django.contrib.gis.utils import LayerMapping
 # geofeeds
 from feeds.models import Country
 
-def import_shp(shp='feeds/data/shapefile/TM_WORLD_BORDERS_SIMPL-0.3.shp'):
+def import_shp(shp='feeds/data/shapefile/TM_WORLD_BORDERS-0.3.shp'):
     # firest delete all features (if any)
     Country.objects.all().delete()
     # mapping model-shp

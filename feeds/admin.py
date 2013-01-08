@@ -1,6 +1,6 @@
 from django.contrib import admin
 from models import *
-from django.contrib.gis.admin import OSMGeoAdmin
+from django.contrib.gis.admin import GeoModelAdmin
 
 class FeedAdmin(admin.ModelAdmin):
 
@@ -25,7 +25,7 @@ class ItemAdmin(admin.ModelAdmin):
     def feed_class(self, obj):
       return "%s" % obj.feed.feed_class
 
-class PlaceAdmin(OSMGeoAdmin):
+class PlaceAdmin(GeoModelAdmin):
 
     model = Place
     list_per_page = 20

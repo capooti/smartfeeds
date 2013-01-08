@@ -2,5 +2,6 @@
 {% load static %}
 
 {% if item.domain.country %}
-    Domain: <img src="{% get_static_prefix %}images/flags/{{ item.domain.country.iso2|lower }}.gif" alt="{{ item.domain.country.name }}" title="{{ item.domain.country.name }}" />  {{ item.domain.name }} 
+    Domain: <img src="{% get_static_prefix %}feeds/images/flags/{{ item.domain.country.iso2|lower }}.gif" alt="{{ item.domain.country.name }}" title="{{ item.domain.country.name }}" />
+    <a href="{% url domain-detail item.domain.id %}">{{ item.domain.name }}</a>
 {% endif %}

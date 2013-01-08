@@ -4,6 +4,7 @@ import views
 
 urlpatterns = patterns('',
     # items
+    url(r'^map$', views.items_map, name='items-map'),
     url(r'^items$', views.items_list, name='items-list'),
     url(r'^item/(?P<id>\d+)/detail$', views.item_detail, name='item-detail'),
     

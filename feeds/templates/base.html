@@ -4,27 +4,55 @@
     <head>
         <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>
         <title>The GeoFeeds Web Application</title>
-        <link type="text/css" href="{{ STATIC_URL }}css/feeds.css" rel="stylesheet" />
-        {% block media %}{% endblock %}
+        <link type="text/css" href="{{ STATIC_URL }}bootstrap/assets/css/bootstrap.css" rel="stylesheet" />
+        <link type="text/css" href="{{ STATIC_URL }}feeds/css/feeds.css" rel="stylesheet" />
+        <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="{{ STATIC_URL }}bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="{{ STATIC_URL }}bootstrap/assets/ico/favicon.png">
+                                   
+    {% block media %}{% endblock %}
     </head>
 
     <body>
-        
-        <h1><a href="{% url items-list %}">Sm@rtFeeds</a></h1>
-        
-        <div id="menu">
-            <a href="{% url items-list %}">Home</a></li>
-            <a href="">Tags</a></li>
-            <a href="{% url places-list %}">Places</a></li>
-            <a href="{% url people-list %}">People</a></li>
-            <a href="">Keywords</a></li>
-            <a href="{% url domains-list %}">Domains</a></li>
-            <a href="{% url admin:index %}">Admin</a></li>
+    
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <a class="brand" href="{% url items-map %}">Sm@rtFeeds</a>
+              <div class="nav-collapse collapse">
+                  <ul class="nav">
+                      <li class="active"><a href="{% url items-map %}">Home</a></li>
+                      <li><a href="{% url items-list %}">Items</a></li>
+                      <li><a href="">Tags</a></li>
+                      <li><a href="{% url places-list %}">Places</a></li>
+                      <li><a href="{% url people-list %}">People</a></li>
+                      <li><a href="">Keywords</a></li>
+                      <li><a href="{% url domains-list %}">Domains</a></li>
+                      <li><a href="{% url admin:index %}">Admin</a></li>
+                  </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+          </div>
         </div>
         
-        <div id="page">
+        <div class="container">
             <div id="title">
-                <h2>{% block title %}{% endblock %}</h2>
+                <h1>{% block title %}{% endblock %}</h2>
             </div>
             <div id="content">
                 {% block content %}{% endblock %}
@@ -33,9 +61,26 @@
         
         <div id="footer">
           <hr />
-          Powered by <a href="https://github.com/capooti/smartfeeds">Sm@rtFeeds</a>, 
-          by <a href="http://paolocorti.net/">capooti</a> - ©2011,2012
+          <p align="center">Powered by <a href="https://github.com/capooti/smartfeeds">Sm@rtFeeds</a>, 
+          by <a href="http://paolocorti.net/">capooti</a> - ©2011,2012</p>
         </div>
+        
+            <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-transition.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-alert.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-modal.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-dropdown.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-tab.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-popover.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-button.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-collapse.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-carousel.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-typeahead.js"></script>
         
     </body>
 </html>

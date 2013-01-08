@@ -49,6 +49,7 @@ class Feed(models.Model):
     url_xml = models.URLField(verify_exists=False, max_length=255)
     url_html = models.URLField(verify_exists=False, max_length=255)
     enabled = models.BooleanField()
+    icon = models.ImageField(null=True, blank=True, upload_to='feeds')
     tags = TaggableManager()
 
     def __unicode__(self):
@@ -99,7 +100,7 @@ class Place(gismodels.Model):
     name = gismodels.CharField(max_length=255)
     slug = gismodels.SlugField(max_length=255)
     geometry = gismodels.PointField(srid=4326)
-    item = models.ManyToManyField(Item, null=True, blank=True)
+    items = models.ManyToManyField(Item, null=True, blank=True)
     country = models.ForeignKey(Country, null=True) # derived
     objects = gismodels.GeoManager()
 
@@ -145,7 +146,7 @@ class Image(gismodels.Model):
     item = models.ForeignKey(Item)
 
     def __unicode__(self):
-        return '%s' % (self.name)
+        return '%s' % (self.alt)
     
 class Filter(models.Model):
     """

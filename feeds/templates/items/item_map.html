@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load pagination_tags %}
+{% load tags %}
+
+{% block title %}Map{% endblock %}
+
+{% block content %}
+
+    <!-- places list -->
+    {% show_places_map places %}
+    
+{% endblock %}
+

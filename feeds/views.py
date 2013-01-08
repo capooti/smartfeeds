@@ -91,6 +91,13 @@ def list_feeds_for_class(request, feedclass):
 
 # item
 
+def items_map(request):
+    places = Place.objects.all()
+    return render_to_response('items/item_map.html', 
+        {   'places' : places,
+        },
+        context_instance=RequestContext(request))
+
 def items_list(request):
     """
     View a full list of items for a given feed, with certain filters.

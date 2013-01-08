@@ -1,13 +1,15 @@
 <!-- Place map -->
 {% load static %}
 
-<div id="map" style="height: 400px; width: 600px"></div>
+{% block media %}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+{% endblock %}
 
-<link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
-<!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
-<![endif]-->
-<script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
+<div id="map" style="height: 400px; width: 1200px"></div>
 
 <script>
     var map = new L.Map('map');
@@ -21,13 +23,24 @@
     var northEast = new L.LatLng({{ places.extent.3 }},{{ places.extent.2 }});
     var bounds = new L.LatLngBounds(southWest, northEast);
     map.fitBounds(bounds).addLayer(cloudmade);
-    
+
     // let's add the markers
     {% for place in places %}
-        var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }}),
-	      marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
+         var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
+        
+        {% if place.items.all.0.feed.icon %}
+            var myIcon = L.icon({
+                iconUrl: '/media/{{ place.items.all.0.feed.icon }}',
+                iconSize: [15, 15],
+            });
+            var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }}, {icon: myIcon});
+        {% else %}
+            var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
+        {% endif %}
+        
+	    
         map.addLayer(marker_{{ place.id }});
-        marker_{{ place.id }}.bindPopup("<b>{{ place.name }}</b>");
+        marker_{{ place.id }}.bindPopup("<a href='{% url place-detail place.slug %}'>{{ place.name }}</a>");
     {% endfor %}
 
 </script>

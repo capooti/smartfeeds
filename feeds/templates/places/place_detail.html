@@ -7,7 +7,7 @@
     
 {% endblock %}
 
-{% block title %}Items for place {{ place.name }}{% endblock %}
+{% block title %}{{ place.name }}{% endblock %}
 
 {% block content %}
 
@@ -15,8 +15,9 @@
     {% show_map place %}
     
     <!-- item list -->
+    <p>Items for place {{ place.name }} ({{ place.country }})</p>
     <ul>
-    {% for item in place.item.all %}
+    {% for item in place.items.all %}
         <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
     {% endfor %}
     </ul>

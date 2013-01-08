@@ -1,13 +1,15 @@
 <!-- Place map -->
 {% load static %}
 
-<div id="map" style="height: 400px; width: 600px"></div>
+{% block media %}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+{% endblock %}
 
-<link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
-<!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
-<![endif]-->
-<script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
+<div id="map" style="height: 400px; width: 1200px"></div>
 
 <script>
     var map = new L.Map('map');

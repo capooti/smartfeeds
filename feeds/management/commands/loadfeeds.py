@@ -47,6 +47,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         #try:
+        #Item.objects.all().delete()
+        #Place.objects.all().delete()
+        #Domain.objects.all().delete()
         self.loadfeeds()
         self.stdout.write('\nFeeds succesfully loaded in database.\n')
         #except Exception,e:
@@ -180,7 +183,7 @@ class Command(BaseCommand):
                             place = places[0]
                         # add the item to the place
                         #import ipdb;ipdb.set_trace()
-                        place.item.add(item)
+                        place.items.add(item)
                         
         # finally let's remove old items
         self.stdout.write('\n***Removing old items')
