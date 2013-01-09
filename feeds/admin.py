@@ -17,13 +17,17 @@ class ItemAdmin(admin.ModelAdmin):
 
     model = Item
     list_per_page = 20
-    list_display = ['title', 'feed', 'feed_class', 'updated', 'filtered', 'archived']
+    list_display = ['title', 'feed', 'feed_class', 'updated', 'filtered', 'archived', 'the_tags']
     search_fields = ['title', 'summary']
     list_filter = ['filtered', 'archived', 'feed']
     date_hierarchy = 'updated'
 
     def feed_class(self, obj):
-      return "%s" % obj.feed.feed_class
+        return "%s" % obj.feed.feed_class
+      
+    def the_tags(self, obj):
+        return "%s" % (obj.tags.all(), )
+    the_tags.short_description = 'Tags'
 
 class PlaceAdmin(GeoModelAdmin):
 

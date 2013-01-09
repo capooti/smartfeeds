@@ -75,9 +75,9 @@ def show_map(place):
     }
     
 @register.inclusion_tag('template_tags/show_places_map.html')
-def show_places_map(places):
+def show_places_map(items):
     return {
-        'places': places,
+        'items': items,
         'cloudmade_api_key': settings.CLOUDMADE_API_KEY
     }
     

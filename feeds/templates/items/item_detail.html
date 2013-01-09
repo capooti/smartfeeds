@@ -9,34 +9,40 @@
 
 {% block content %}
 
-    <!-- item detail -->
-    <ul>
-        <li>Update: {{ item.updated }}</li>
-        <li>Title: {{ item.title }}</li>
-        <li>Feed: {{ item.feed.name }}</li>
-        <li><a href="{{ item.link }}">Link</a></li>
-    </ul>
-    
-    <!-- places list -->
-    {% show_places item %}
-    
-    <!-- map -->
-    {% show_places_map item.place_set.all %}
-    
-    <!-- people list -->
-    {% show_people_long item %}
-    
-    <!-- keyword list -->
-    {% show_keywords_long item %}
-    
-    <!-- images list -->
-    {% show_images_long item %}
-    
-    <!-- domain -->
-    {% show_domain item %}
-    
-    <!-- tags -->
-    {% show_tags item %}
-    
+    <div class="row">
+        <div class="span3">
+            <!-- item detail -->
+            <ul>
+                <li>Update: {{ item.updated }}</li>
+                <li>Title: {{ item.title }}</li>
+                <li>Feed: {{ item.feed.name }}</li>
+                <li><a href="{{ item.link }}">Link</a></li>
+            </ul>
+            <!-- people list -->
+            {% show_people_long item %}
+            
+            <!-- keyword list -->
+            {% show_keywords_long item %}
+            
+            <!-- images list -->
+            {% show_images_long item %}
+            
+            <!-- domain -->
+            {% show_domain item %}
+            
+            <!-- tags -->
+            {% show_tags item %}
+            
+            <!-- places -->
+            {% show_places item %}
+            
+        </div>
+        <div class="span9"><!-- places list -->
+            
+            <!-- map -->
+            {% show_places_map item.place_set.all %}
+        </div>
+    </div>
+
 {% endblock %}
 

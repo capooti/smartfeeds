@@ -11,15 +11,21 @@
 
 {% block content %}
 
-    <!-- map -->
-    {% show_map place %}
-    
-    <!-- item list -->
-    <p>Items for place {{ place.name }} ({{ place.country }})</p>
-    <ul>
-    {% for item in place.items.all %}
-        <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
-    {% endfor %}
-    </ul>
+    <div class="row">
+        <div class="span3">
+            <!-- item list -->
+            <p>Items for place {{ place.name }} ({{ place.country }})</p>
+            <ul>
+            {% for item in place.items.all %}
+                <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="span9"><!-- places list -->
+            
+            <!-- map -->
+            {% show_map place %}
+        </div>
+    </div>
     
 {% endblock %}

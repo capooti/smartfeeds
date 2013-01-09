@@ -9,7 +9,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 {% endblock %}
 
-<div id="map" style="height: 400px; width: 1200px"></div>
+<div id="map" style="height: 80%; width: 100%"></div>
 
 <script>
     var map = new L.Map('map');
@@ -19,28 +19,42 @@
     });
     
     // initial extent and zoom
-    var southWest = new L.LatLng({{ places.extent.1 }},{{ places.extent.0 }});
-    var northEast = new L.LatLng({{ places.extent.3 }},{{ places.extent.2 }});
-    var bounds = new L.LatLngBounds(southWest, northEast);
-    map.fitBounds(bounds).addLayer(cloudmade);
+    var latlon_init = new L.LatLng(0, 0);
+    map.setView(latlon_init, 2).addLayer(cloudmade);
+    
+    // initial extent and zoom
+    //var southWest = new L.LatLng({{ item.place_set.all.extent.1 }},{{ item.place_set.all.extent.0 }});
+    //var northEast = new L.LatLng({{ item.place_set.all.extent.3 }},{{ item.place_set.all.extent.2 }});
+    //var bounds = new L.LatLngBounds(southWest, northEast);
+    //map.fitBounds(bounds).addLayer(cloudmade);
 
     // let's add the markers
-    {% for place in places %}
-         var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
-        
-        {% if place.items.all.0.feed.icon %}
-            var myIcon = L.icon({
-                iconUrl: '/media/{{ place.items.all.0.feed.icon }}',
-                iconSize: [15, 15],
-            });
-            var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }}, {icon: myIcon});
-        {% else %}
-            var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
-        {% endif %}
-        
-	    
-        map.addLayer(marker_{{ place.id }});
-        marker_{{ place.id }}.bindPopup("<a href='{% url place-detail place.slug %}'>{{ place.name }}</a>");
+    {% for item in items %}
+        {% for place in item.place_set.all %}
+             var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
+            
+            {% if item.feed.icon %}
+                var myIcon = L.icon({
+                    iconUrl: '/media/{{ place.items.all.0.feed.icon }}',
+                    iconSize: [20, 20],
+                });
+                var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }}, {icon: myIcon});
+            {% else %}
+                var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
+            {% endif %}
+            
+	        
+            map.addLayer(marker_{{ place.id }});
+            var popup = "<p><a href='{% url place-detail place.slug %}'>{{ place.name }}</a></p>";
+            popup = popup + "<a href='{% url item-detail item.id %}'>{{ item.title|linebreaksbr }}</a>";
+            popup = popup + "<br />{{ item.updated }}<br />";
+            {% if item.tags %}
+                {% for tag in item.tags.all %}
+                    popup = popup + " <a href='{% url tag-detail tag.slug %}'>{{ tag.name }}</a>";
+                {% endfor %}
+            {% endif %}
+            marker_{{ place.id }}.bindPopup(popup);
+        {% endfor %}
     {% endfor %}
 
 </script>

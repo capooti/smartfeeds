@@ -77,114 +77,116 @@ class Command(BaseCommand):
                 # must import only items not already in the database (check URL of item)
                 items = Item.objects.filter(link=link)
                 if len(items)==0: # new item, must import it!
-                    self.stdout.write('\nImporting item %s' % item_parsed.title.encode('utf-8'))
-                    # store item
-                    item = Item()
-                    item.title = item_parsed.title[:255].encode('utf-8')
-                    item.summary = item_parsed.summary.encode('utf-8')
-                    item.link = link
-                    item.feed = feed
-                    item.updated = datetime.datetime.fromtimestamp(mktime(item_parsed.updated_parsed))
-                    
-                    # 0. domain
-                    # first let's check domain country
-                    parsed = urlparse.urlsplit(link)
-                    domain_name = parsed.netloc.encode('utf-8')
-                    g = GeoIP()
-                    country_code = g.country(domain_name)['country_code']
-                    self.stdout.write('\nDomain: %s, country code: %s' % (domain_name, country_code))
+                    try:
+                        self.stdout.write('\nImporting item %s' % item_parsed.title.encode('utf-8'))
+                        # store item
+                        item = Item()
+                        item.title = item_parsed.title[:255].encode('utf-8')
+                        item.summary = item_parsed.summary.encode('utf-8')
+                        item.link = link
+                        item.feed = feed
+                        item.updated = datetime.datetime.fromtimestamp(mktime(item_parsed.updated_parsed))
                         
-                    countries = Country.objects.filter(iso2=country_code)
-                    country = None
-                    if countries.count() > 0:
-                        country = countries[0]
-                    # check if if we need to add domain in db
-                    domains = Domain.objects.all().filter(name=domain_name)
-                    if not domains:
-                        self.stdout.write('\nAdding a new domain to the system: %s for this item.' % domain_name)
-                        domain = Domain()
-                        domain.name = domain_name
-                        domain.country = country
-                        domain.save()
-                    else:
-                        domain = domains[0]
-                    # add the item to the place
-                    item.domain = domain
-                    
-                    # save item
-                    item.save()
-                    
-                    # define text to be parsed
-                    text2parse = item.title + item.summary
-                    # 1. keywords
-                    keywords = Keyword.objects.all()
-                    for keyword in keywords:
-                        if re.search(keyword.name, text2parse, re.IGNORECASE):
-                            self.stdout.write('\n***Keyword %s is in this item.' % keyword.name)
-                            #import ipdb;ipdb.set_trace()
-                            keyword.item.add(item)
+                        # 0. domain
+                        # first let's check domain country
+                        parsed = urlparse.urlsplit(link)
+                        domain_name = parsed.netloc.encode('utf-8')
+                        g = GeoIP()
+                        country_code = g.country(domain_name)['country_code']
+                        self.stdout.write('\nDomain: %s, country code: %s' % (domain_name, country_code))
                             
-                    # 2. people
-                    people = Person.objects.all()
-                    for person in people:
-                        if re.search(person.name, text2parse, re.IGNORECASE):
-                            self.stdout.write('\n***Person %s is in this item.' % person.name)
-                            #import ipdb;ipdb.set_trace()
-                            person.item.add(item)
-                            
-                    # 3. images
-                    #url = item.link
-                    #soup = bs(urlopen(url))
-                    #parsed = list(urlparse.urlparse(url))
-                    soup = bs(item.summary)
-                    parsed = list(item.summary)
-                    for img in soup.findAll("img"):
-                        print img
-                        alt = ''
-                        if img.has_key('src'):
-                            if img.has_key('alt'):
-                                alt = img["alt"]
-                            if img["src"].lower().startswith("http"):
-                                #import ipdb;ipdb.set_trace()
-                                src = img["src"]
-                            else:
-                                # TODO src extraction from relative url
-                                src = urlparse.urlunparse(parsed)
-                            print src
-                            image = Image()
-                            image.src = src
-                            image.alt = alt
-                            image.item = item
-                            image.save()
-                            
-                    # 4. tags
-                    tags = Tag.objects.all()
-                    for tag in tags:
-                        if re.search(tag.name, text2parse, re.IGNORECASE):
-                            self.stdout.write('\n***Tag %s is in this item.' % tag.name)
-                            item.tags.add(tag)
-                        
-                    # 5. places
-                    # let's check if there are places linked to this item
-                    pm=placemaker('4BRX3JfV34E7uaK02MDR.5nn7EAw7DptfhbRTdrMQQjHbXVedgXfsQLaFWwp7fIm')
-                    pm_places = pm.find_places(text2parse)
-                    for pm_place in pm_places:
-                        placename = pm_place.name.decode('utf-8')
-                        # first check if we need to add new place
-                        places = Place.objects.all().filter(name=placename)
-                        if not places:
-                            self.stdout.write('\nAdding a new place to the system: %s for this item.' % pm_place.name)
-                            place = Place()
-                            place.name = placename
-                            place.slug = slugify(place.name)
-                            place.geometry = 'POINT(%s %s)' % (pm_place.centroid.longitude, pm_place.centroid.latitude)
-                            place.save()
+                        countries = Country.objects.filter(iso2=country_code)
+                        country = None
+                        if countries.count() > 0:
+                            country = countries[0]
+                        # check if if we need to add domain in db
+                        domains = Domain.objects.all().filter(name=domain_name)
+                        if not domains:
+                            self.stdout.write('\nAdding a new domain to the system: %s for this item.' % domain_name)
+                            domain = Domain()
+                            domain.name = domain_name
+                            domain.country = country
+                            domain.save()
                         else:
-                            place = places[0]
+                            domain = domains[0]
                         # add the item to the place
-                        #import ipdb;ipdb.set_trace()
-                        place.items.add(item)
+                        item.domain = domain
                         
+                        # save item
+                        item.save()
+                        
+                        # define text to be parsed
+                        text2parse = item.title + item.summary
+                        # 1. keywords
+                        keywords = Keyword.objects.all()
+                        for keyword in keywords:
+                            if re.search(keyword.name, text2parse, re.IGNORECASE):
+                                self.stdout.write('\n***Keyword %s is in this item.' % keyword.name)
+                                #import ipdb;ipdb.set_trace()
+                                keyword.item.add(item)
+                                
+                        # 2. people
+                        people = Person.objects.all()
+                        for person in people:
+                            if re.search(person.name, text2parse, re.IGNORECASE):
+                                self.stdout.write('\n***Person %s is in this item.' % person.name)
+                                #import ipdb;ipdb.set_trace()
+                                person.item.add(item)
+                                
+                        # 3. images
+                        #url = item.link
+                        #soup = bs(urlopen(url))
+                        #parsed = list(urlparse.urlparse(url))
+                        soup = bs(item.summary)
+                        parsed = list(item.summary)
+                        for img in soup.findAll("img"):
+                            print img
+                            alt = ''
+                            if img.has_key('src'):
+                                if img.has_key('alt'):
+                                    alt = img["alt"]
+                                if img["src"].lower().startswith("http"):
+                                    #import ipdb;ipdb.set_trace()
+                                    src = img["src"]
+                                else:
+                                    # TODO src extraction from relative url
+                                    src = urlparse.urlunparse(parsed)
+                                print src
+                                image = Image()
+                                image.src = src
+                                image.alt = alt
+                                image.item = item
+                                image.save()
+                                
+                        # 4. tags
+                        tags = Tag.objects.all()
+                        for tag in tags:
+                            if re.search(tag.name, text2parse, re.IGNORECASE):
+                                self.stdout.write('\n***Tag %s is in this item.' % tag.name)
+                                item.tags.add(tag)
+                            
+                        # 5. places
+                        # let's check if there are places linked to this item
+                        pm=placemaker('4BRX3JfV34E7uaK02MDR.5nn7EAw7DptfhbRTdrMQQjHbXVedgXfsQLaFWwp7fIm')
+                        pm_places = pm.find_places(text2parse)
+                        for pm_place in pm_places:
+                            placename = pm_place.name.decode('utf-8')
+                            # first check if we need to add new place
+                            places = Place.objects.all().filter(name=placename)
+                            if not places:
+                                self.stdout.write('\nAdding a new place to the system: %s for this item.' % pm_place.name)
+                                place = Place()
+                                place.name = placename
+                                place.slug = slugify(place.name)
+                                place.geometry = 'POINT(%s %s)' % (pm_place.centroid.longitude, pm_place.centroid.latitude)
+                                place.save()
+                            else:
+                                place = places[0]
+                            # add the item to the place
+                            #import ipdb;ipdb.set_trace()
+                            place.items.add(item)
+                    except Exception,e:
+                        self.stdout.write('\nThere was an error importing this item. Skipping to the next one...')
         # finally let's remove old items
         self.stdout.write('\n***Removing old items')
         firstday = datetime.date.today()-datetime.timedelta(days=int(settings.DAYS_TO_KEEP))

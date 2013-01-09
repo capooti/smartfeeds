@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load taggit_extras %}
+
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+    
+    {% get_tagcloud as tags %}
+    <ul>
+    {% for tag in tags %}
+        <li><a href='{% url items-map %}?tag={{tag}}'><font size={{tag.weight|floatformat:0}}>{{tag}} ({{tag.num_times}})</font></a></li>
+    {% endfor %}
+    </ul>
+    
+{% endblock %}

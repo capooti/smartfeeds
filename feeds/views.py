@@ -92,9 +92,21 @@ def list_feeds_for_class(request, feedclass):
 # item
 
 def items_map(request):
-    places = Place.objects.all()
+    """
+    View a series of items on a map.
+    """
+    items = Item.objects.all().order_by('-updated')
+    map_title = ''
+    if 'tag' in request.GET:
+        tag = request.GET.get('tag', '')
+        items =items.filter(tags__name__in=[tag])
+        map_title = 'News items tagged as "%s"' % tag
+    # latest 300
+    items = items[:300]
     return render_to_response('items/item_map.html', 
-        {   'places' : places,
+        {   'map_items' : items,
+            'items' : items,
+            'map_title': map_title,
         },
         context_instance=RequestContext(request))
 

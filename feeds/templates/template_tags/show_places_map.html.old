@@ -1,0 +1,54 @@
+<!-- Place map -->
+{% load static %}
+
+{% block media %}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+{% endblock %}
+
+<div id="map" style="height: 80%; width: 100%"></div>
+
+<script>
+    var map = new L.Map('map');
+    var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/{{ cloudmade_api_key }}/997/256/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    });
+    
+    // initial extent and zoom
+    var southWest = new L.LatLng({{ places.extent.1 }},{{ places.extent.0 }});
+    var northEast = new L.LatLng({{ places.extent.3 }},{{ places.extent.2 }});
+    var bounds = new L.LatLngBounds(southWest, northEast);
+    map.fitBounds(bounds).addLayer(cloudmade);
+
+    // let's add the markers
+    {% for place in places %}
+         var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
+        
+        {% if place.items.all.0.feed.icon %}
+            var myIcon = L.icon({
+                iconUrl: '/media/{{ place.items.all.0.feed.icon }}',
+                iconSize: [15, 15],
+            });
+            var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }}, {icon: myIcon});
+        {% else %}
+            var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
+        {% endif %}
+        
+	    
+        map.addLayer(marker_{{ place.id }});
+        var popup = "<a href='{% url place-detail place.slug %}'>{{ place.name }}</a>";
+        // let's get the item list for the place
+        popup = popup + "<ul>";
+        {% for item in place.items.all %}
+            popup = popup + "<li><a href='{% url item-detail item.id %}'>{{ item.title|linebreaks }}</a></li>";
+        {% endfor %}
+        popup = popup + "</ul>";
+        marker_{{ place.id }}.bindPopup(popup);
+    {% endfor %}
+
+</script>
+    

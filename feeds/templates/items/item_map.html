@@ -3,12 +3,29 @@
 {% load pagination_tags %}
 {% load tags %}
 
-{% block title %}Map{% endblock %}
+{% block title %}{{ map_title }}{% endblock %}
 
 {% block content %}
 
-    <!-- places list -->
-    {% show_places_map places %}
-    
-{% endblock %}
+    <div class="row">
+        <div class="span3">
+            <p>Latest 300 news items</p>
+            {% autopaginate items 25 %}
+            {% for item in items %}
+                <img src='/media/{{ item.feed.icon }}'> {{ item.updated }}
+                {% if item.tags %}
+                    {% for tag in item.tags.all %}
+                        <a href="{% url tag-detail tag.slug %}">{{ tag.name }}</a>
+                    {% endfor %}
+                {% endif %}
+                <br />
+            {% endfor %}
+            {% paginate %}
+        </div>
+        <div class="span9">
+            <!-- map -->
+            {% show_places_map map_items %}
+        </div>
+    </div>
 
+{% endblock %}
