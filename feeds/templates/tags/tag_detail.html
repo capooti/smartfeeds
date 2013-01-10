@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Items for tag {{ tag_slug }}{% endblock %}
+{% load pagination_tags %}
+
+{% block title %}Items for tag "{{ tag_slug }}"{% endblock %}
 
 {% block content %}
 
     <!-- item list -->
+    {% autopaginate items 20 %}
+    {% paginate %}
     <ul>
     {% for item in items %}
         <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
