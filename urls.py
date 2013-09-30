@@ -5,13 +5,17 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
-
 # admin
 from django.contrib import admin
 admin.autodiscover()
 
+from feeds.views import tweets_map
+
 urlpatterns = patterns('',
 
+    # home page
+    url(r'^$', tweets_map, name='tweets-map'),
+    
     # admin url
     (r'^admin/', include(admin.site.urls)),
 

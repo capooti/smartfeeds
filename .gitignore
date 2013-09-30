@@ -6,8 +6,6 @@ smartfeeds_env
 local_settings.py
 # ignore data directory
 data
-# ignore project static directory
-static
 crontab.sh
 temp
 
