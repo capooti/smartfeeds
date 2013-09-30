@@ -1,6 +1,7 @@
 from django.contrib import admin
 from models import *
-from django.contrib.gis.admin import GeoModelAdmin
+#from django.contrib.gis.admin import GeoModelAdmin
+from django.contrib.gis.admin import OSMGeoAdmin
 
 class FeedAdmin(admin.ModelAdmin):
 
@@ -8,6 +9,17 @@ class FeedAdmin(admin.ModelAdmin):
     list_per_page = 20
     list_display = ['name', 'description', 'the_tags', 'enabled']
     search_fields = ['name', 'description']
+    
+    def the_tags(self, obj):
+        return "%s" % (obj.tags.all(), )
+    the_tags.short_description = 'Tags'
+    
+class TweetAdmin(admin.ModelAdmin):
+
+    model = Tweet
+    list_per_page = 20
+    list_display = ['twitter_id', 'status', 'username', 'the_places', 'the_searches']
+    search_fields = ['twitter_id', 'status', 'username']
     
     def the_tags(self, obj):
         return "%s" % (obj.tags.all(), )
@@ -29,19 +41,30 @@ class ItemAdmin(admin.ModelAdmin):
         return "%s" % (obj.tags.all(), )
     the_tags.short_description = 'Tags'
 
-class PlaceAdmin(GeoModelAdmin):
+class PlaceAdmin(OSMGeoAdmin):
 
     model = Place
     list_per_page = 20
-    list_display = ['name', 'country']
-    search_fields = ['name', 'item__title']
-    list_filter = ['country']
+    list_display = ['name', 'country', 'from_gps']
+    search_fields = ['name']
+    list_filter = ['from_gps', 'country']
     
     # Openlayers settings
     map_width = 500
     map_height = 500
-    #openlayers_url = '/static/openlayers/lib/OpenLayers.js'
     default_zoom = 18
+    
+class SearchAdmin(OSMGeoAdmin):
+
+    model = Search
+    list_per_page = 20
+    list_display = ['name', 'the_keywords', 'is_enabled']
+    search_fields = ['name']
+    
+    # Openlayers settings
+    map_width = 500
+    map_height = 500
+    default_zoom = 2
 
 class PersonAdmin(admin.ModelAdmin):
 
@@ -73,8 +96,10 @@ class FilterAdmin(admin.ModelAdmin):
     
 # register for admin
 admin.site.register(Feed, FeedAdmin)
+admin.site.register(Tweet, TweetAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Place, PlaceAdmin)
+admin.site.register(Search, SearchAdmin)
 admin.site.register(Filter, FilterAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Keyword, KeywordAdmin)

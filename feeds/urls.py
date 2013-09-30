@@ -3,14 +3,17 @@ from django.conf.urls.defaults import *
 import views
 
 urlpatterns = patterns('',
-    # items
-    url(r'^map$', views.items_map, name='items-map'),
-    url(r'^items$', views.items_list, name='items-list'),
-    url(r'^item/(?P<id>\d+)/detail$', views.item_detail, name='item-detail'),
+    # tweets
+    url(r'^map$', views.tweets_map, name='tweets-map'),
+    url(r'^tweets$', views.tweets_list, name='tweets-list'),
+    url(r'^tweet/(?P<id>\d+)/detail$', views.tweet_detail, name='tweet-detail'),
     
     # places
     url(r'^places$', views.places_list, name='places-list'),
     url(r'^places/(?P<place_slug>[-\w]+)/detail$', views.place_detail, name='place-detail'),
+    
+    # searches
+    url(r'^searches$', views.searches_list, name='searches-list'),
     
     # people
     url(r'^people$', views.people_list, name='people-list'),

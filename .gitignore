@@ -2,9 +2,12 @@
 *.pyc
 # ignore virtualenv
 smartfeeds_env
-# ignore settings.py files
-settings.py
+# ignore local_settings.py files
+local_settings.py
 # ignore data directory
 data
 # ignore project static directory
 static
+crontab.sh
+temp
+

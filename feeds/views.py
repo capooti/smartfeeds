@@ -9,7 +9,8 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import settings
 # application
-from models import Feed, Item, Place, Person, Domain, Keyword, Filter
+from models import Feed, Item, Place, Person, Domain, Keyword, Filter, Tweet, Search
+from pressevents.models import Event
 from forms import PlaceForm
 
 @login_required
@@ -91,26 +92,59 @@ def list_feeds_for_class(request, feedclass):
 
 # item
 
-def items_map(request):
+def tweets_map(request):
     """
-    View a series of items on a map.
+    View a series of places on a map.
     """
-    items = Item.objects.all().order_by('-updated')
-    map_title = ''
-    if 'tag' in request.GET:
-        tag = request.GET.get('tag', '')
-        items =items.filter(tags__name__in=[tag])
-        map_title = 'News items tagged as "%s"' % tag
-    # latest 300
-    items = items[:300]
+    # TODO
+    #if 'tag' in request.GET:
+    #    tag = request.GET.get('tag', '')
+    #    tweets = tweets.filter(tags__name__in=[tag])
+    #    search_name = 'all searches'
+    rcount = 200
+    tweets = None
+    places = None
+    if 'search_id' in request.GET:
+        search_id = request.GET.get('search_id', '')
+        search = Search.objects.get(id=search_id)
+        tweets = Tweet.objects.filter(search=search)[:rcount]
+        places = Place.objects.filter(tweet__search__id=search_id)[:rcount]
+        # TODO filter on multiple keywords (for now just the first one)
+        #import ipdb;ipdb.set_trace()
+        events = Event.objects.filter(url__icontains=search.keywords.all()[0].name)
+        #import ipdb;ipdb.set_trace()
+        # events = Event.objects.all()
+        events = events.filter(geometry__intersects=search.geometry)[:rcount]
+        search_name = search.name
+    else:
+        tweets = Tweet.objects.all().order_by('-created_at')[:rcount]
+        places = Place.objects.all()[:rcount]
+        events = Event.objects.all()[:rcount]
+        search_name = 'All searches'
+        map_title = 'All searches'
+    map_title = search_name
+    search_text = 'Latest %s tweets items from %s' % (len(tweets), search_name)
     return render_to_response('items/item_map.html', 
-        {   'map_items' : items,
-            'items' : items,
-            'map_title': map_title,
+        {   
+            'tweets': tweets,
+            'places': places,
+            'search_name': search_name,
+            'events': events,
         },
         context_instance=RequestContext(request))
 
-def items_list(request):
+def tweets_list(request):
+    """
+    View a full list of tweets.
+    """
+    tweets = Tweet.objects.all().order_by('-created_at')
+    return render_to_response('items/item_list.html', 
+        {   
+            'tweets' : tweets,
+        },
+        context_instance=RequestContext(request))
+    
+def tweets_list_old(request):
     """
     View a full list of items for a given feed, with certain filters.
     """
@@ -178,7 +212,7 @@ def items_list(request):
         },
         context_instance=RequestContext(request))
 
-def item_detail(request, id):
+def tweet_detail(request, id):
     """
     Item detail for a given pk.
     """
@@ -199,15 +233,25 @@ def places_list(request):
             'places': places,
         },
         context_instance=RequestContext(request))
+        
+def searches_list(request):
+    """
+    View a full list of searches.
+    """
+    searches = Search.objects.all()
+    return render_to_response('searches/search_list.html', 
+        {
+            'searches': searches,
+        },
+        context_instance=RequestContext(request))
 
 def place_detail(request, place_slug):
     """
     Place detail for a given name.
     """
     place = get_object_or_404(Place, slug=place_slug)
-    form = PlaceForm(instance=place)
     return render_to_response('places/place_detail.html',
-            {'place': place, 'form': form},
+            {'place': place},
             RequestContext(request))
             
 # person

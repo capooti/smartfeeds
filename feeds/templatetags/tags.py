@@ -1,12 +1,12 @@
 from django import template
-from feeds.models import Item
+from feeds.models import Item, Place
 import settings
 
 register = template.Library()
 
 @register.inclusion_tag('template_tags/places.html')
-def show_places(item):
-    places = item.place_set.all()
+def show_places(tweet):
+    places = tweet.places.all()
     return {
         'places': places,
     }
@@ -75,10 +75,17 @@ def show_map(place):
     }
     
 @register.inclusion_tag('template_tags/show_places_map.html')
-def show_places_map(items):
+def show_places_map(places, events):
+    # for a single item we need still to get the recordset
+    icon_size = 20
+    if isinstance(places, Place):
+        places = Place.objects.filter(id=places.id)
+        icon_size = 30
     return {
-        'items': items,
-        'cloudmade_api_key': settings.CLOUDMADE_API_KEY
+        'places': places,
+        'icon_size': icon_size,
+        'cloudmade_api_key': settings.CLOUDMADE_API_KEY,
+        'events': events,
     }
     
     

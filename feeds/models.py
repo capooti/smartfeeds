@@ -100,12 +100,44 @@ class Place(gismodels.Model):
     name = gismodels.CharField(max_length=255)
     slug = gismodels.SlugField(max_length=255)
     geometry = gismodels.PointField(srid=4326)
-    items = models.ManyToManyField(Item, null=True, blank=True)
+    #tweets = models.ManyToManyField(Tweet, null=True, blank=True)
+    from_gps = gismodels.BooleanField()
     country = models.ForeignKey(Country, null=True) # derived
     objects = gismodels.GeoManager()
 
     def __unicode__(self):
         return '%s' % (self.name)
+        
+class Tweet(models.Model):
+    """
+    Model for Tweets.
+    """
+    # attributes
+    twitter_id = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    created_at = models.DateTimeField(null=True)
+    username = models.CharField(max_length=255)
+    filtered = models.BooleanField(default=False)
+    archived = models.BooleanField(default=False)
+    places = models.ManyToManyField(Place, null=True, blank=True)
+    
+    tags = TaggableManager()
+
+    def item_type(self):
+        if self.archived:
+            return 'archived-item'
+        if self.filtered:
+            return 'filtered-item'
+        return 'simple-item'
+
+    def __unicode__(self):
+        return '%s' % (self.status)
+        
+    def the_places(self):
+        return "\n".join([p.name for p in self.places.all()])
+        
+    def the_searches(self):
+        return "\n".join([s.name for s in self.search_set.all()])
         
 class Person(gismodels.Model):
     """
@@ -115,7 +147,7 @@ class Person(gismodels.Model):
     name = models.CharField(max_length=255)
     full_name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
-    item = models.ManyToManyField(Item, null=True, blank=True)
+    tweets = models.ManyToManyField(Tweet, null=True, blank=True)
 
     def __unicode__(self):
         return '%s' % (self.name)
@@ -131,10 +163,30 @@ class Keyword(gismodels.Model):
     # attributes
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
-    item = models.ManyToManyField(Item, null=True, blank=True)
 
     def __unicode__(self):
         return '%s' % (self.name)
+        
+class Search(gismodels.Model):
+    """
+    Spatial model for Search.
+    """
+    # attributes
+    name = gismodels.CharField(max_length=50)
+    geometry = gismodels.MultiPolygonField(srid=4326)
+    keywords = models.ManyToManyField(Keyword, null=True, blank=True)
+    tweets = models.ManyToManyField(Tweet, null=True, blank=True)
+    is_enabled = models.BooleanField()
+    objects = gismodels.GeoManager()
+
+    def __unicode__(self):
+        return '%s' % (self.name)
+        
+    class Meta:
+        ordering = ['name']
+        
+    def the_keywords(self):
+        return "\n".join([k.name for k in self.keywords.all()])
         
 class Image(gismodels.Model):
     """
