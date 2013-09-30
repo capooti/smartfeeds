@@ -17,7 +17,7 @@
             <ul>
             {% for t in tweets %}
                 <li>
-                <a href="{% url tweets-map %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</a>,
+                <a href="{% url "tweets-map" %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</a>,
                 <strong><a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status|truncatechars:50 }}
                 </li>
             {% endfor %}

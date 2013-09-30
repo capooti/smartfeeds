@@ -59,6 +59,7 @@ class SearchAdmin(OSMGeoAdmin):
     model = Search
     list_per_page = 20
     list_display = ['name', 'the_keywords', 'is_enabled']
+    exclude = ['tweets',]
     search_fields = ['name']
     
     # Openlayers settings

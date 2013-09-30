@@ -11,7 +11,7 @@
     {% paginate %}
         {% for t in tweets %}
             <!-- item title (with link) -->
-            <strong><a href="{% url tweets-map %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</strong></a>,
+            <strong><a href="{% url "tweets-map" %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</strong></a>,
             <a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status }}
             <!-- places list -->
             {% show_places t %}

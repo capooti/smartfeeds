@@ -2,7 +2,7 @@
 {% if people %}
     This news may refer to the following people:
     {% for person in people %}
-        <a href="{% url person-detail person.slug %}">{{ person.name }}</a>
+        <a href="{% url "person-detail" person.slug %}">{{ person.name }}</a>
     {% endfor %}
     <br />
 {% endif %}

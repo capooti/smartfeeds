@@ -11,7 +11,7 @@
     {% paginate %}
         <ul>
         {% for search in searches %}
-            <li><a href="{% url tweets-map %}?search_id={{ search.id }}">{{ search.name }}</a>, having a total of {{ search.tweets.count }} tweets
+            <li><a href="{% url "tweets-map" %}?search_id={{ search.id }}">{{ search.name }}</a>, having a total of {{ search.tweets.count }} tweets
         {% endfor %}
         </ul>
     {% paginate %}

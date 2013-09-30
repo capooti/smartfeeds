@@ -3,7 +3,6 @@ import os
 # django batteries
 from django.conf.urls.defaults import *
 from django.conf import settings
-from django.views.generic import list_detail, create_update
 from django.core.urlresolvers import reverse
 
 

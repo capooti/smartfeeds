@@ -33,27 +33,27 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </a>
-              <a class="brand" href="{% url tweets-map %}">Sm@rtFeeds</a>
+              <a class="brand" href="{% url "tweets-map" %}">Sm@rtFeeds</a>
               <div class="nav-collapse collapse">
                   <ul class="nav">
                       <!-- home -->
-                      {% url tweets-map as url %}
+                      {% url "tweets-map" as url %}
                       <li {% if request.get_full_path = url %} class="active" {% endif %}>
                       <a href="{{ url }}">Home</a></li>
                       <!-- tweets -->
-                      {% url tweets-list as url %}
+                      {% url "tweets-list" as url %}
                       <li {% if request.get_full_path = url %} class="active" {% endif %}>
                       <a href="{{ url }}">Tweets</a></li>
                       <!-- places -->
-                      {% url places-list as url %}
+                      {% url "places-list" as url %}
                       <li {% if request.get_full_path = url %} class="active" {% endif %}>
                       <a href="{{ url }}">Places</a></li>
                       <!-- searches -->
-                      {% url searches-list as url %}
+                      {% url "searches-list" as url %}
                       <li {% if request.get_full_path = url %} class="active" {% endif %}>
                       <a href="{{ url }}">Searches</a></li>
                       <!-- admin -->
-                      <li><a href="{% url admin:index %}">Admin</a></li>
+                      <li><a href="{% url "admin:index" %}">Admin</a></li>
                   </ul>
               </div><!--/.nav-collapse -->
             </div>

@@ -46,8 +46,8 @@ class Feed(models.Model):
     # attributes
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    url_xml = models.URLField(verify_exists=False, max_length=255)
-    url_html = models.URLField(verify_exists=False, max_length=255)
+    url_xml = models.URLField(max_length=255)
+    url_html = models.URLField(max_length=255)
     enabled = models.BooleanField()
     icon = models.ImageField(null=True, blank=True, upload_to='feeds')
     tags = TaggableManager()
@@ -184,6 +184,7 @@ class Search(gismodels.Model):
         
     class Meta:
         ordering = ['name']
+        verbose_name_plural = "Searches"
         
     def the_keywords(self):
         return "\n".join([k.name for k in self.keywords.all()])

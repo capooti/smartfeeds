@@ -4,7 +4,7 @@
     <ul>
     {% for person in people %}
     <li>
-        <a href="{% url person-detail person.slug %}">{{ person.name }}</a>
+        <a href="{% url "person-detail" person.slug %}">{{ person.name }}</a>
     </li>
     {% endfor %}
 </ul>
