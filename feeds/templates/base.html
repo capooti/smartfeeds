@@ -33,16 +33,26 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </a>
-              <a class="brand" href="{% url items-map %}">Sm@rtFeeds</a>
+              <a class="brand" href="{% url tweets-map %}">Sm@rtFeeds</a>
               <div class="nav-collapse collapse">
                   <ul class="nav">
-                      <li class="active"><a href="{% url items-map %}">Home</a></li>
-                      <li><a href="{% url items-list %}">Items</a></li>
-                      <li><a href="{% url tags-list %}">Tags</a></li>
-                      <li><a href="{% url places-list %}">Places</a></li>
-                      <li><a href="{% url people-list %}">People</a></li>
-                      <li><a href="">Keywords</a></li>
-                      <li><a href="{% url domains-list %}">Domains</a></li>
+                      <!-- home -->
+                      {% url tweets-map as url %}
+                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
+                      <a href="{{ url }}">Home</a></li>
+                      <!-- tweets -->
+                      {% url tweets-list as url %}
+                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
+                      <a href="{{ url }}">Tweets</a></li>
+                      <!-- places -->
+                      {% url places-list as url %}
+                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
+                      <a href="{{ url }}">Places</a></li>
+                      <!-- searches -->
+                      {% url searches-list as url %}
+                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
+                      <a href="{{ url }}">Searches</a></li>
+                      <!-- admin -->
                       <li><a href="{% url admin:index %}">Admin</a></li>
                   </ul>
               </div><!--/.nav-collapse -->
@@ -61,8 +71,7 @@
         
         <div id="footer">
           <hr />
-          <p align="center">Powered by <a href="https://github.com/capooti/smartfeeds">Sm@rtFeeds</a>, 
-          by <a href="http://paolocorti.net/">capooti</a> - ©2011,2012</p>
+          <p align="center">Powered by <a href="https://github.com/capooti/smartfeeds">Sm@rtFeeds</a></p>
         </div>
         
             <!-- Le javascript

@@ -3,56 +3,19 @@
 {% load pagination_tags %}
 {% load tags %}
 
-{% block title %}Items list{% endblock %}
+{% block title %}Tweets list{% endblock %}
 
 {% block content %}
  
-{% autopaginate items 10 %}
+{% autopaginate tweets 10 %}
     {% paginate %}
-        {% for item in items %}
-        <!-- item -->
-        <div id='{{ item.item_type }}'>
-
+        {% for t in tweets %}
             <!-- item title (with link) -->
-            <strong><a href="{% url item-detail item.id %}">{{ item.title }}</a></strong>
-
-            <!-- item summary -->
-            <p>{{ item.summary|striptags }}</p>
-
+            <strong><a href="{% url tweets-map %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</strong></a>,
+            <a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status }}
             <!-- places list -->
-            {% show_places item %}
-            
-            <!-- people list -->
-            {% show_people_short item %}
-            
-            <!-- keywords list -->
-            {% show_keywords_short item %}
-            
-            <!-- images list -->
-            {% show_images_short item %}
-            
-            <!-- domain -->
-            {% show_domain item %}
-            
-            <!-- tags -->
-            {% show_tags item %}
-            
-            <! others -->
-            <br />
-            {{ item.updated }} | from feed: {{ item.feed }} | <a href='{{ item.link }}'>news source</a><br /> 
-            <!-- links (only for authenticated users) -->
-            {% if user.is_authenticated %}
-                <a href='#' id="{{ item.id }}" class='archive_link'>
-                {% if item.archived %}
-                    Unarchive
-                {% else %}
-                    Archive
-                {% endif %}
-                </a>
-            <!-- end of links -->  
-            {% endif %}         
-        </div>  
-        <!-- end of item -->
+            {% show_places t %}
+
         {% endfor %}
     {% paginate %}
 

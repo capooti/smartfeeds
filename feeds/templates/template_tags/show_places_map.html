@@ -1,5 +1,4 @@
-<!-- Place map -->
-{% load static %}
+{% load staticfiles %}
 
 {% block media %}
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
@@ -22,40 +21,53 @@
     var latlon_init = new L.LatLng(0, 0);
     map.setView(latlon_init, 2).addLayer(cloudmade);
     
-    // initial extent and zoom
-    //var southWest = new L.LatLng({{ item.place_set.all.extent.1 }},{{ item.place_set.all.extent.0 }});
-    //var northEast = new L.LatLng({{ item.place_set.all.extent.3 }},{{ item.place_set.all.extent.2 }});
-    //var bounds = new L.LatLngBounds(southWest, northEast);
-    //map.fitBounds(bounds).addLayer(cloudmade);
+    // from search extent
+    map.fitBounds([
+        [{{ places.extent.1 }}, {{ places.extent.0 }}],
+        [{{ places.extent.3 }}, {{ places.extent.2 }}]
+    ]);
 
-    // let's add the markers
-    {% for item in items %}
-        {% for place in item.place_set.all %}
-             var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
-            
-            {% if item.feed.icon %}
-                var myIcon = L.icon({
-                    iconUrl: '/media/{{ place.items.all.0.feed.icon }}',
-                    iconSize: [20, 20],
-                });
-                var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }}, {icon: myIcon});
+    // let's add the markers for places
+    {% for place in places.all %}
+         var markerPlace_{{ place.id }} = new L.LatLng({{ place.geometry.y }}, {{ place.geometry.x }});
+        
+        var myIcon = L.icon({
+            {% if place.from_gps %}
+                iconUrl: '{% static "feeds/images/twitter-icon-green-25.png" %}',
             {% else %}
-                var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
+                iconUrl: '{% static "feeds/images/twitter-icon-blue-25.png" %}',
             {% endif %}
-            
-	        
-            map.addLayer(marker_{{ place.id }});
-            var popup = "<p><a href='{% url place-detail place.slug %}'>{{ place.name }}</a></p>";
-            popup = popup + "<a href='{% url item-detail item.id %}'>{{ item.title|linebreaksbr }}</a>";
-            popup = popup + "<br />{{ item.updated }}<br />";
-            {% if item.tags %}
-                {% for tag in item.tags.all %}
-                    popup = popup + " <a href='{% url tag-detail tag.slug %}'>{{ tag.name }}</a>";
-                {% endfor %}
+            {% if place.tweet_set.all.count > 5 %}
+                iconSize: [25,25],
+            {% else %}
+                iconSize: [15,15],
             {% endif %}
-            marker_{{ place.id }}.bindPopup(popup);
-        {% endfor %}
+        });
+        var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }}, {icon: myIcon});
+        //var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
+
+        map.addLayer(marker_{{ place.id }});
+        var popup = "<strong><a href='{% url place-detail place.slug %}'>{{ place.name }}</a></strong>";
+        popup = popup + "<br /><a href='https://twitter.com/{{ t.place.tweet_set.all.0.username }}'>@{{ place.tweet_set.all.0.username }}</a>,/{{ place.tweet_set.all.0.created_at }}<br />";
+        popup = popup + "<br />{{ place.tweet_set.all.0.status|linebreaksbr }}";
+        
+        {% if place.tweet_set.all.count > 1 %}
+            popup = popup + "<br /><br />There are other {{ place.tweet_set.all.count|add:"-1" }} tweets for this place.<br /><a href='{% url place-detail place.slug %}'>See the full list</a>.";
+        {% endif %}
+        
+        marker_{{ place.id }}.bindPopup(popup);
     {% endfor %}
 
+    {% for e in events %}
+
+        var markerEventPlace_{{ e.id }} = new L.LatLng({{ e.geometry.y }}, {{ e.geometry.x }});
+        var markerEvent_{{ e.id }} = new L.Marker(markerEventPlace_{{ e.id }});
+        map.addLayer(markerEvent_{{ e.id }});
+        var popup_event = "<strong>{{ e.eventcode.description }}</strong>";
+        popup_event = popup_event + "<br />Mentions: {{ e.num_mentions }}, Sources: {{ e.num_sources }}, Articles: {{ e.num_articles }}";
+        popup_event = popup_event + "<br /><a href='{{ e.url }}'>{{ e.url|truncatechars:50 }}</a>"
+        markerEvent_{{ e.id }}.bindPopup(popup_event);
+    {% endfor %}
+    
 </script>
     

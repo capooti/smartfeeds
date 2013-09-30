@@ -12,20 +12,23 @@
 {% block content %}
 
     <div class="row">
-        <div class="span3">
             <!-- item list -->
-            <p>Items for place {{ place.name }} ({{ place.country }})</p>
-            <ul>
-            {% for item in place.items.all %}
-                <li>{{ item.updated }} - <a href="{% url item-detail item.id %}">{{ item.title }}</a></li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div class="span9"><!-- places list -->
+            <p>Tweets for place {{ place.name }}</p>
+            <div class="span12">
+                <!-- map -->
+                {% show_map place %}
+            </div>
             
-            <!-- map -->
-            {% show_map place %}
-        </div>
+            <div class="span12">
+                <ul>
+                {% for t in place.tweet_set.all %}
+                    <li>
+                        <strong><a href="{% url tweets-map %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</strong></a>,
+                        <a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status }}
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
     </div>
     
 {% endblock %}

@@ -35,6 +35,7 @@ class Migration(SchemaMigration):
             ('url_xml', self.gf('django.db.models.fields.URLField')(max_length=255)),
             ('url_html', self.gf('django.db.models.fields.URLField')(max_length=255)),
             ('enabled', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('icon', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal('feeds', ['Feed'])
 
@@ -62,13 +63,25 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('feeds', ['Place'])
 
-        # Adding M2M table for field item on 'Place'
-        db.create_table('feeds_place_item', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('place', models.ForeignKey(orm['feeds.place'], null=False)),
-            ('item', models.ForeignKey(orm['feeds.item'], null=False))
+        # Adding model 'Tweet'
+        db.create_table('feeds_tweet', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('twitter_id', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('status', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('username', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('filtered', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('archived', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.create_unique('feeds_place_item', ['place_id', 'item_id'])
+        db.send_create_signal('feeds', ['Tweet'])
+
+        # Adding M2M table for field places on 'Tweet'
+        db.create_table('feeds_tweet_places', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('tweet', models.ForeignKey(orm['feeds.tweet'], null=False)),
+            ('place', models.ForeignKey(orm['feeds.place'], null=False))
+        ))
+        db.create_unique('feeds_tweet_places', ['tweet_id', 'place_id'])
 
         # Adding model 'Person'
         db.create_table('feeds_person', (
@@ -79,13 +92,13 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('feeds', ['Person'])
 
-        # Adding M2M table for field item on 'Person'
-        db.create_table('feeds_person_item', (
+        # Adding M2M table for field tweets on 'Person'
+        db.create_table('feeds_person_tweets', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('person', models.ForeignKey(orm['feeds.person'], null=False)),
-            ('item', models.ForeignKey(orm['feeds.item'], null=False))
+            ('tweet', models.ForeignKey(orm['feeds.tweet'], null=False))
         ))
-        db.create_unique('feeds_person_item', ['person_id', 'item_id'])
+        db.create_unique('feeds_person_tweets', ['person_id', 'tweet_id'])
 
         # Adding model 'Keyword'
         db.create_table('feeds_keyword', (
@@ -95,13 +108,29 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('feeds', ['Keyword'])
 
-        # Adding M2M table for field item on 'Keyword'
-        db.create_table('feeds_keyword_item', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('keyword', models.ForeignKey(orm['feeds.keyword'], null=False)),
-            ('item', models.ForeignKey(orm['feeds.item'], null=False))
+        # Adding model 'Search'
+        db.create_table('feeds_search', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('geometry', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
         ))
-        db.create_unique('feeds_keyword_item', ['keyword_id', 'item_id'])
+        db.send_create_signal('feeds', ['Search'])
+
+        # Adding M2M table for field keywords on 'Search'
+        db.create_table('feeds_search_keywords', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('search', models.ForeignKey(orm['feeds.search'], null=False)),
+            ('keyword', models.ForeignKey(orm['feeds.keyword'], null=False))
+        ))
+        db.create_unique('feeds_search_keywords', ['search_id', 'keyword_id'])
+
+        # Adding M2M table for field tweets on 'Search'
+        db.create_table('feeds_search_tweets', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('search', models.ForeignKey(orm['feeds.search'], null=False)),
+            ('tweet', models.ForeignKey(orm['feeds.tweet'], null=False))
+        ))
+        db.create_unique('feeds_search_tweets', ['search_id', 'tweet_id'])
 
         # Adding model 'Image'
         db.create_table('feeds_image', (
@@ -136,20 +165,29 @@ class Migration(SchemaMigration):
         # Deleting model 'Place'
         db.delete_table('feeds_place')
 
-        # Removing M2M table for field item on 'Place'
-        db.delete_table('feeds_place_item')
+        # Deleting model 'Tweet'
+        db.delete_table('feeds_tweet')
+
+        # Removing M2M table for field places on 'Tweet'
+        db.delete_table('feeds_tweet_places')
 
         # Deleting model 'Person'
         db.delete_table('feeds_person')
 
-        # Removing M2M table for field item on 'Person'
-        db.delete_table('feeds_person_item')
+        # Removing M2M table for field tweets on 'Person'
+        db.delete_table('feeds_person_tweets')
 
         # Deleting model 'Keyword'
         db.delete_table('feeds_keyword')
 
-        # Removing M2M table for field item on 'Keyword'
-        db.delete_table('feeds_keyword_item')
+        # Deleting model 'Search'
+        db.delete_table('feeds_search')
+
+        # Removing M2M table for field keywords on 'Search'
+        db.delete_table('feeds_search_keywords')
+
+        # Removing M2M table for field tweets on 'Search'
+        db.delete_table('feeds_search_tweets')
 
         # Deleting model 'Image'
         db.delete_table('feeds_image')
@@ -185,6 +223,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['name']", 'object_name': 'Feed'},
             'description': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'enabled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'icon': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'url_html': ('django.db.models.fields.URLField', [], {'max_length': '255'}),
@@ -217,7 +256,6 @@ class Migration(SchemaMigration):
         'feeds.keyword': {
             'Meta': {'object_name': 'Keyword'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'item': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Item']", 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
         },
@@ -225,18 +263,36 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['name']", 'object_name': 'Person'},
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'item': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Item']", 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
+            'tweets': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Tweet']", 'null': 'True', 'blank': 'True'})
         },
         'feeds.place': {
             'Meta': {'object_name': 'Place'},
             'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['feeds.Country']", 'null': 'True'}),
             'geometry': ('django.contrib.gis.db.models.fields.PointField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'item': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Item']", 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
+        },
+        'feeds.search': {
+            'Meta': {'ordering': "['name']", 'object_name': 'Search'},
+            'geometry': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'keywords': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Keyword']", 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'tweets': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Tweet']", 'null': 'True', 'blank': 'True'})
+        },
+        'feeds.tweet': {
+            'Meta': {'object_name': 'Tweet'},
+            'archived': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'filtered': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'places': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['feeds.Place']", 'null': 'True', 'blank': 'True'}),
+            'status': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'twitter_id': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'taggit.tag': {
             'Meta': {'object_name': 'Tag'},

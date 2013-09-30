@@ -2,18 +2,17 @@
 {% load static %}
 
 {% if places %}
-    <p>This news may refer to the following places:</p>
     <ul>
     {% for place in places %}
         <li>
             {% if place.country %}
                 <img src="{% get_static_prefix %}feeds/images/flags/{{ place.country.iso2|lower }}.gif" alt="{{ place.country }}"  title="{{ place.country }}" />
             {% endif %}
-         <a href="{% url place-detail place.slug %}">{{ place.name }}</a>
-         {% if place.country %} ({{ place.country }}) {% endif %}
+            <a href="{% url place-detail place.slug %}">{{ place.name }}</a>
+            {% if place.tweet_set.count > 1 %}
+                (other {{ place.tweet_set.count }} tweets for this place)
+            {% endif %}
         </li>
     {% endfor %}
     </ul>
-{% else %}
-    <p>No places available for this news.</p>
 {% endif %}

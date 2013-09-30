@@ -3,28 +3,40 @@
 {% load pagination_tags %}
 {% load tags %}
 
-{% block title %}{{ map_title }}{% endblock %}
+{% block title %}{{ search_name }}{% endblock %}
 
 {% block content %}
 
     <div class="row">
-        <div class="span3">
-            <p>Latest 300 news items</p>
-            {% autopaginate items 25 %}
-            {% for item in items %}
-                <img src='/media/{{ item.feed.icon }}'> {{ item.updated }}
-                {% if item.tags %}
-                    {% for tag in item.tags.all %}
-                        <a href="{% url tag-detail tag.slug %}">{{ tag.name }}</a>
-                    {% endfor %}
-                {% endif %}
-                <br />
-            {% endfor %}
+        
+        <div class="span4">
+            <!-- tweets -->
+            <p style='font-size:18px'><strong>Tweets</strong></p>
+            {% autopaginate tweets 5 %}
             {% paginate %}
+            <ul>
+            {% for t in tweets %}
+                <li>
+                <a href="{% url tweets-map %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</a>,
+                <strong><a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status|truncatechars:50 }}
+                </li>
+            {% endfor %}
+            </ul>
+            <!-- press news -->
+            <p style='font-size:18px'><strong>Press News</strong></p>
+            {% autopaginate events 5 %}
+            {% paginate %}
+            <ul>
+            {% for e in events %}
+                <li>
+                {{ e.eventcode.description }}: <a href="{{ e.url }}">{{ e.url|truncatechars:25 }}</a>,
+                </li>
+            {% endfor %}
+            </ul>
         </div>
-        <div class="span9">
+        <div class="span8">
             <!-- map -->
-            {% show_places_map map_items %}
+            {% show_places_map places events %}
         </div>
     </div>
 

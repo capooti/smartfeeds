@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load pagination_tags %}
+{% load tags %}
+
+{% block title %}Searches list{% endblock %}
+
+{% block content %}
+ 
+{% autopaginate searches 20 %}
+    {% paginate %}
+        <ul>
+        {% for search in searches %}
+            <li><a href="{% url tweets-map %}?search_id={{ search.id }}">{{ search.name }}</a>, having a total of {{ search.tweets.count }} tweets
+        {% endfor %}
+        </ul>
+    {% paginate %}
+
+{% endblock %}
