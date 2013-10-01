@@ -1,7 +1,7 @@
 from django.contrib import admin
 from models import Event, EventCode
-#from django.contrib.gis.admin import GeoModelAdmin
-from django.contrib.gis.admin import OSMGeoAdmin
+from django.contrib.gis.admin import GeoModelAdmin
+#from django.contrib.gis.admin import OSMGeoAdmin
 
 class EventCodeAdmin(admin.ModelAdmin):
 

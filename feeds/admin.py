@@ -1,7 +1,7 @@
 from django.contrib import admin
 from models import *
-#from django.contrib.gis.admin import GeoModelAdmin
-from django.contrib.gis.admin import OSMGeoAdmin
+from django.contrib.gis.admin import GeoModelAdmin
+#from django.contrib.gis.admin import OSMGeoAdmin
 
 class FeedAdmin(admin.ModelAdmin):
 
@@ -41,7 +41,7 @@ class ItemAdmin(admin.ModelAdmin):
         return "%s" % (obj.tags.all(), )
     the_tags.short_description = 'Tags'
 
-class PlaceAdmin(OSMGeoAdmin):
+class PlaceAdmin(GeoModelAdmin):
 
     model = Place
     list_per_page = 20
@@ -54,7 +54,7 @@ class PlaceAdmin(OSMGeoAdmin):
     map_height = 500
     default_zoom = 18
     
-class SearchAdmin(OSMGeoAdmin):
+class SearchAdmin(GeoModelAdmin):
 
     model = Search
     list_per_page = 20
