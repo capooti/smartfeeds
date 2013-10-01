@@ -19,7 +19,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         #Event.objects.all().delete()
         keywords = ['earthquake', 'flood', 'rebel', 'refugee']
-        with open('/home/capooti/git/github/capooti/smartfeeds/temp/20130925.export.CSV', 'rb') as csvfile:
+        with open('temp/20130929.export.CSV', 'rb') as csvfile:
             eventsreader = csv.reader(csvfile, delimiter='\t')
             for row in eventsreader:
                 print row
