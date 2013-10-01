@@ -109,7 +109,8 @@ class Command(BaseCommand):
                             # if we have a place, check if the place is on the search geometry
                             #qs = SpatialFilter.objects.filter(geometry__contains=place.geometry)
                             if search.geometry.contains(place.geometry):
-                                place.save()
+                                import ipdb;ipdb.set_trace()
+				place.save()
                                 t.places.add(place)
                 # we can have the geo place from twitter
                 if result.geo:
@@ -130,7 +131,7 @@ class Command(BaseCommand):
                     t.delete()
                         
     def get_placename(self, name):
-        conn = psycopg2.connect("dbname=smartfeeds user=smartfeeds password=smartfeeds")
+        conn = psycopg2.connect("dbname=smartfeeds user=geonode password=wfpshare")
         cur = conn.cursor()
         cur.execute("SELECT name, longitude, latitude FROM geonames WHERE LOWER(asciiname) = '%s';" % name.lower())
         placename = cur.fetchone()

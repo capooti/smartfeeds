@@ -102,7 +102,7 @@ class Place(gismodels.Model):
     geometry = gismodels.PointField(srid=4326)
     #tweets = models.ManyToManyField(Tweet, null=True, blank=True)
     from_gps = gismodels.BooleanField()
-    country = models.ForeignKey(Country, null=True) # derived
+    country = models.ForeignKey(Country, null=True, blank=True) # derived
     objects = gismodels.GeoManager()
 
     def __unicode__(self):

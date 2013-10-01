@@ -11,7 +11,7 @@
     {% paginate %}
         <ul>
         {% for place in places %}
-            <li><a href="{% url place-detail place.slug %}">{{ place.name }}</a>
+            <li><a href="{% url "place-detail" place.slug %}">{{ place.name }}</a>
              apperas in {{ place.tweet_set.all.count }} tweets</li>
         {% endfor %}
         </ul>
