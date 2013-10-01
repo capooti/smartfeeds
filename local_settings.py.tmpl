@@ -1,0 +1,31 @@
+import os
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+DEBUG = True
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'smartfeeds',
+        'USER': 'youruser',
+        'PASSWORD': 'yourpassword',
+        'HOST': 'localhost'
+    }
+}
+
+MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(PROJECT_PATH, "static_root")
+STATIC_URL = "/static_smartfeeds/"
+
+# API keys
+GEOIP_PATH='/path/to/geoip'
+GOOGLE_API_KEY = 'your-key'
+CLOUDMADE_API_KEY = 'your-key'
+
+TWITTER_AUTH = {
+    'CONSUMER_KEY': '...',
+    'CONSUMER_SECRET': '...',
+    'ACCESS_TOKEN': '...',
+    'ACCESS_SECRET': '...',
+}

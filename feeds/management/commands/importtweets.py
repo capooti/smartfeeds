@@ -36,10 +36,10 @@ class Command(BaseCommand):
         #Place.objects.all().delete()
         #Domain.objects.all().delete()
         query = "flood"
-        consumer_key = 'N9nnBnEPUk5QOLoLe4DMKw'
-        consumer_secret = 'HyHTXfZJagpIjvjJp95lV0KUYAsVdnTQ8iZl1Pz9P8'
-        access_token = '1878945475-iriUlXMVlj9cx1eUosBe6t0t8o3RcPphmlXusDN'
-        access_secret = 'KMpUhvpJldCKnM22izKYuleDA368CgORjyetx1Xeg'
+        consumer_key = settings.TWITTER_AUTH['CONSUMER_KEY']
+        consumer_secret = settings.TWITTER_AUTH['CONSUMER_SECRET']
+        access_token = settings.TWITTER_AUTH['ACCESS_TOKEN']
+        access_secret = settings.TWITTER_AUTH['ACCESS_SECRET']
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_secret)
         api = tweepy.API(auth)
@@ -109,12 +109,10 @@ class Command(BaseCommand):
                             # if we have a place, check if the place is on the search geometry
                             #qs = SpatialFilter.objects.filter(geometry__contains=place.geometry)
                             if search.geometry.contains(place.geometry):
-                                import ipdb;ipdb.set_trace()
-				place.save()
+                                place.save()
                                 t.places.add(place)
                 # we can have the geo place from twitter
                 if result.geo:
-                    #import ipdb;ipdb.set_trace()
                     place = Place()
                     place.name = t.status
                     place.slug = slugify(t.status)
@@ -123,7 +121,6 @@ class Command(BaseCommand):
                     print place.geometry.x, place.geometry.y, search.name
                     print search.geometry.extent
                     if search.geometry.contains(place.geometry):
-                        #import ipdb;ipdb.set_trace()
                         place.save()
                         t.places.add(place)
                 # remove the tweet if it if has no places
@@ -131,7 +128,10 @@ class Command(BaseCommand):
                     t.delete()
                         
     def get_placename(self, name):
-        conn = psycopg2.connect("dbname=smartfeeds user=geonode password=wfpshare")
+        conn = psycopg2.connect("dbname=%s user=%s password=%s" % 
+            (settings.DATABASES['default']['NAME'],
+            settings.DATABASES['default']['USER'],
+            settings.DATABASES['default']['PASSWORD']))
         cur = conn.cursor()
         cur.execute("SELECT name, longitude, latitude FROM geonames WHERE LOWER(asciiname) = '%s';" % name.lower())
         placename = cur.fetchone()

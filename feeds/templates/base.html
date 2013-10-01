@@ -1,66 +1,66 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>
-        <title>The GeoFeeds Web Application</title>
-        <link type="text/css" href="{{ STATIC_URL }}bootstrap/assets/css/bootstrap.css" rel="stylesheet" />
+    <title>Fixed Top Navbar Example for Bootstrap</title>
+
+    <link type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet" />
         <link type="text/css" href="{{ STATIC_URL }}feeds/css/feeds.css" rel="stylesheet" />
-        <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-    <link href="{{ STATIC_URL }}bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
-    
-    <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
-                    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" href="{{ STATIC_URL }}bootstrap/assets/ico/favicon.png">
-                                   
-    {% block media %}{% endblock %}
-    </head>
+        <link type="text/css" href="{{ STATIC_URL }}bootstrap/css/navbar-fixed-top.css" rel="stylesheet" />
 
-    <body>
-    
-        <div class="navbar navbar-inverse navbar-fixed-top">
-          <div class="navbar-inner">
-            <div class="container">
-              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </a>
-              <a class="brand" href="{% url "tweets-map" %}">Sm@rtFeeds</a>
-              <div class="nav-collapse collapse">
-                  <ul class="nav">
-                      <!-- home -->
-                      {% url "tweets-map" as url %}
-                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
-                      <a href="{{ url }}">Home</a></li>
-                      <!-- tweets -->
-                      {% url "tweets-list" as url %}
-                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
-                      <a href="{{ url }}">Tweets</a></li>
-                      <!-- places -->
-                      {% url "places-list" as url %}
-                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
-                      <a href="{{ url }}">Places</a></li>
-                      <!-- searches -->
-                      {% url "searches-list" as url %}
-                      <li {% if request.get_full_path = url %} class="active" {% endif %}>
-                      <a href="{{ url }}">Searches</a></li>
-                      <!-- admin -->
-                      <li><a href="{% url "admin:index" %}">Admin</a></li>
-                  </ul>
-              </div><!--/.nav-collapse -->
-            </div>
-          </div>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img class="navbar-brand" src="{{ STATIC_URL }}/feeds/images/smartfeedlogo.png" alt="Sm@rtFeeds" />
+     
         </div>
-        
-        <div class="container">
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+              <!-- home -->
+              {% url "tweets-map" as url %}
+              <li {% if request.get_full_path = url %} class="active" {% endif %}>
+              <a href="{{ url }}">Home</a></li>
+              <!-- tweets -->
+              {% url "tweets-list" as url %}
+              <li {% if request.get_full_path = url %} class="active" {% endif %}>
+              <a href="{{ url }}">Tweets</a></li>
+              <!-- places -->
+              {% url "places-list" as url %}
+              <li {% if request.get_full_path = url %} class="active" {% endif %}>
+              <a href="{{ url }}">Places</a></li>
+              <!-- searches -->
+              {% url "searches-list" as url %}
+              <li {% if request.get_full_path = url %} class="active" {% endif %}>
+              <a href="{{ url }}">Searches</a></li>
+              <!-- admin -->
+              <li><a href="{% url "admin:index" %}">Admin</a></li>
+          </ul>
+          
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+    <div class="container">
             <div id="title">
                 <h1>{% block title %}{% endblock %}</h2>
             </div>
@@ -73,24 +73,12 @@
           <hr />
           <p align="center">Powered by <a href="https://github.com/capooti/smartfeeds">Sm@rtFeeds</a></p>
         </div>
-        
-            <!-- Le javascript
+
+
+    <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ STATIC_URL }}bootstrap/assets/js/jquery.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-transition.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-alert.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-modal.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-dropdown.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-tab.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-tooltip.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-popover.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-button.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-collapse.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-carousel.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/assets/js/bootstrap-typeahead.js"></script>
-        
-    </body>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+  </body>
 </html>
-

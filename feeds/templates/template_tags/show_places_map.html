@@ -22,12 +22,10 @@
     map.setView(latlon_init, 2).addLayer(cloudmade);
     
     // from search extent
-    {% if places %}
     map.fitBounds([
         [{{ places.extent.1 }}, {{ places.extent.0 }}],
         [{{ places.extent.3 }}, {{ places.extent.2 }}]
     ]);
-    {% endif %}
 
     // let's add the markers for places
     {% for place in places.all %}

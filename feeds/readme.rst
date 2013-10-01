@@ -1,4 +1,4 @@
-Import GeoNames, virtual driver::
+* Import GeoNames, virtual driver::
 
     <OGRVRTDataSource>
     <OGRVRTLayer name="geonames">
@@ -14,11 +14,11 @@ Import GeoNames, virtual driver::
     </OGRVRTLayer>
     </OGRVRTDataSource>
 
-Then ogr2ogr::
+* Then ogr2ogr::
 
-    $ ogr2ogr -f PostgreSQL PG:"dbname='smartfeeds' host='localhost' port='5432' user='smartfeeds' password='smartfeeds'" geonames.vrt
+    $ ogr2ogr -f PostgreSQL PG:"dbname='smartfeeds' host='localhost' port='5432' user='youruser' password='yourpassword'" geonames.vrt
     
-Create the index::
+* Create the index::
 
     CREATE INDEX geonames_lower_idx
       ON geonames
