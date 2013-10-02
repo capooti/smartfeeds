@@ -9,12 +9,13 @@ from django.core.urlresolvers import reverse
 from django.contrib import admin
 admin.autodiscover()
 
-from feeds.views import tweets_map
+from feeds.views import searches_list
 
 urlpatterns = patterns('',
 
     # home page
-    url(r'^$', tweets_map, name='tweets-map'),
+    #url(r'^$', tweets_map, name='tweets-map'),
+    url(r'^$', searches_list, name='searches-list'),
     
     # admin url
     (r'^admin/', include(admin.site.urls)),

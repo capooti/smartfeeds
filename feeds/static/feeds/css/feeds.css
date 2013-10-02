@@ -1,6 +1,6 @@
 /* Map */
 #map {
-    height: 300px;
+    height: 425px;
     width: 1200px;
     border: 2px solid #299bdc;;
     margin:0 auto;
@@ -68,7 +68,7 @@ h2 {
 }
 
 .navbar-brand2 {
-    margin: 0 40px;
+    margin: 0 35px;
 }
 
 .navbar

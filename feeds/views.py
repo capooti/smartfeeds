@@ -107,7 +107,7 @@ def tweets_map(request):
     if 'search_id' in request.GET:
         search_id = request.GET.get('search_id', '')
         search = Search.objects.get(id=search_id)
-        tweets = Tweet.objects.filter(search=search)[:rcount]
+        tweets = Tweet.objects.filter(search=search).order_by('-created_at')[:rcount]
         places = Place.objects.filter(tweet__search__id=search_id)[:rcount]
         # TODO filter on multiple keywords (for now just the first one)
         #import ipdb;ipdb.set_trace()
