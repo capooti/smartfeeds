@@ -63,9 +63,12 @@
     {% endfor %}
 
     {% for e in events %}
-
+        var eventIcon = L.icon({
+                iconUrl: '{% static "feeds/images/feed_1.png" %}',
+                iconSize: [15,15]
+        });
         var markerEventPlace_{{ e.id }} = new L.LatLng({{ e.geometry.y }}, {{ e.geometry.x }});
-        var markerEvent_{{ e.id }} = new L.Marker(markerEventPlace_{{ e.id }});
+        var markerEvent_{{ e.id }} = new L.Marker(markerEventPlace_{{ e.id }}, {icon: eventIcon});
         map.addLayer(markerEvent_{{ e.id }});
         var popup_event = "<strong>{{ e.eventcode.description }}</strong>";
         popup_event = popup_event + "<br />Mentions: {{ e.num_mentions }}, Sources: {{ e.num_sources }}, Articles: {{ e.num_articles }}";
