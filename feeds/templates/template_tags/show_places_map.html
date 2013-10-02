@@ -47,7 +47,7 @@
         //var marker_{{ place.id }} = new L.Marker(markerPlace_{{ place.id }});
 
         map.addLayer(marker_{{ place.id }});
-        var popup = "<strong><a href='{% url "place-detail" place.slug %}'>{{ place.name }}</a></strong>";
+        var popup = "<strong><a href='{% url "place-detail" place.slug %}'>{{ place.name|linebreaksbr }}</a></strong>";
         popup = popup + "<br /><a href='https://twitter.com/{{ t.place.tweet_set.all.0.username }}'>@{{ place.tweet_set.all.0.username }}</a>,/{{ place.tweet_set.all.0.created_at }}<br />";
         popup = popup + "<br />{{ place.tweet_set.all.0.status|linebreaksbr }}";
         
