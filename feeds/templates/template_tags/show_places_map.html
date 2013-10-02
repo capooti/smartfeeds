@@ -8,7 +8,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 {% endblock %}
 
-<div id="map" style="height: 80%; width: 100%"></div>
+<div id="map"></div>
 
 <script>
     var map = new L.Map('map');
@@ -17,9 +17,13 @@
         maxZoom: 18
     });
     
+    var Thunderforest_Landscape = L.tileLayer('http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+});
+    
     // initial extent and zoom
     var latlon_init = new L.LatLng(0, 0);
-    map.setView(latlon_init, 2).addLayer(cloudmade);
+    map.setView(latlon_init, 2).addLayer(Thunderforest_Landscape);
     
     // from search extent
     map.fitBounds([

@@ -8,36 +8,41 @@
 {% block content %}
 
     <div class="row">
-        
-        <div class="span4">
-            <!-- tweets -->
-            <p style='font-size:18px'><strong>Tweets</strong></p>
-            {% autopaginate tweets 5 %}
-            {% paginate %}
-            <ul>
-            {% for t in tweets %}
-                <li>
-                <a href="{% url "tweets-map" %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</a>,
-                <strong><a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status|truncatechars:50 }}
-                </li>
-            {% endfor %}
-            </ul>
-            <!-- press news -->
-            <p style='font-size:18px'><strong>Press News</strong></p>
-            {% autopaginate events 5 %}
-            {% paginate %}
-            <ul>
-            {% for e in events %}
-                <li>
-                {{ e.eventcode.description }}: <a href="{{ e.url }}">{{ e.url|truncatechars:25 }}</a>,
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div class="span8">
-            <!-- map -->
-            {% show_places_map places events %}
-        </div>
+          <div class="row">
+              <div class="col-md-12">
+              <!-- map -->
+              {% show_places_map places events %}
+              </div>
+          </div>
+          <div class="row">
+              <!-- Tweets -->
+              <div class="col-md-6">
+              <h2>Tweets</h2>
+                    {% autopaginate tweets 5 %}
+                    <ul>
+                    {% for t in tweets %}
+                        <li>
+                        <a href="{% url "tweets-map" %}?search_id={{ t.search_set.all.0.id }}">{{ t.search_set.all.0.name }}</a>,
+                        <strong><a href="https://twitter.com/{{ t.username }}">@{{ t.username }}</a></strong>: {{ t.status|truncatechars:50 }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% paginate %}
+              </div>
+              <!-- Press -->
+              <div class="col-md-6">
+                <h2>Press News</h2>
+                {% autopaginate events 5 %}
+                <ul>
+                {% for e in events %}
+                    <li>
+                    {{ e.eventcode.description }}: <a href="{{ e.url }}">{{ e.url|truncatechars:25 }}</a>,
+                    </li>
+                {% endfor %}
+                </ul>
+                {% paginate %}
+              </div>
+          </div>
     </div>
 
 {% endblock %}
