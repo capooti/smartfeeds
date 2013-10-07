@@ -3,7 +3,7 @@ import urlparse
 # django
 from django.db import models
 from django.contrib.gis.db import models as gismodels
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 # django-taggit
 from taggit.managers import TaggableManager
 
@@ -204,5 +204,13 @@ def place_pre_save(sender, **kwargs):
     if rsc.count()>0:
         country = rsc[0]
         place.country = country
+        
+#def search_pre_delete(sender, **kwargs):
+#    search = kwargs["instance"]
+#    import ipdb;ipdb.set_trace()
+#    for tweet in search.tweets.all():
+#        if tweet.search_set.count()==1:
+#            tweet.delete()
        
 pre_save.connect(place_pre_save, sender=Place)
+#pre_delete.connect(search_pre_delete, sender=Search)
