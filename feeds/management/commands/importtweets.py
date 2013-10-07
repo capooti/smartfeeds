@@ -19,6 +19,7 @@ import sys
 import tweepy
 import re
 import psycopg2
+import datetime
 # smartfeed
 from feeds.models import Tweet, Place, Filter, Country, Keyword, Person, Search
 from feeds.utils.placemaker import placemaker
@@ -48,7 +49,7 @@ class Command(BaseCommand):
         for search in Search.objects.all():
             if search.is_enabled:
                 for keyword in search.keywords.all():
-                    results = api.search(q=keyword.name, count=100)
+                    results = api.search(q=keyword.name, count=100, include_entities=True)
                     #results = tweepy.Cursor(api.search(q=keyword.name)).items()
                     for result in results:
                         #import ipdb;ipdb.set_trace()
@@ -57,6 +58,9 @@ class Command(BaseCommand):
                         print " Created : %s" % result.created_at
                         print " %s" % result.text.encode('utf-8')
                         self.loadtweet(search, result)
+        self.stdout.write('\n***Removing old tweets')
+        firstday = datetime.date.today()-datetime.timedelta(days=int(settings.DAYS_TO_KEEP))
+        Tweet.objects.filter(created_at__lte=firstday).delete()
 
     def loadtweet(self, search, result):
         tweets = Tweet.objects.filter(twitter_id=result.id)
@@ -66,8 +70,10 @@ class Command(BaseCommand):
                 t = Tweet()
                 t.twitter_id = result.id
                 t.status = result.text.encode('utf-8')
-                t.username = result.user.name.encode('utf-8')
+                t.user_name = result.user.name.encode('utf-8')
+                t.screen_name = result.user.screen_name.encode('utf-8')
                 t.created_at = result.created_at
+                #import ipdb;ipdb.set_trace()
                 t.save()
                 t.search_set.add(search)
                 
@@ -92,7 +98,7 @@ class Command(BaseCommand):
                 # 5. places
                 for p_key in t.status.split():
                     p_key = p_key.translate(None, "?,#:'\"") # remove certain characters
-                    if len(p_key) > 3:
+                    if len(p_key) > 4:
                         place = None
                         if Place.objects.filter(name__iexact=p_key).exists():
                             #import ipdb;ipdb.set_trace()

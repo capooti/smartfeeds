@@ -112,9 +112,9 @@ def tweets_map(request):
         # TODO filter on multiple keywords (for now just the first one)
         #import ipdb;ipdb.set_trace()
         events = Event.objects.filter(url__icontains=search.keywords.all()[0].name)
-        #import ipdb;ipdb.set_trace()
-        # events = Event.objects.all()
         events = events.filter(geometry__intersects=search.geometry)[:rcount]
+        # items
+        #events = Item.objects.filter(search__id=search_id)[:rcount]
         search_name = search.name
     else:
         tweets = Tweet.objects.all().order_by('-created_at')[:rcount]
@@ -130,6 +130,7 @@ def tweets_map(request):
             'places': places,
             'search_name': search_name,
             'events': events,
+            #'items': items,
         },
         context_instance=RequestContext(request))
 

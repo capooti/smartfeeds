@@ -61,37 +61,6 @@ class Feed(models.Model):
     class Meta:
         ordering = ['name']
 
-class Item(models.Model):
-    """
-    Model for Items.
-    """
-    # attributes
-    title = models.CharField(max_length=255)
-    summary = models.TextField()
-    updated = models.DateTimeField(null=True)
-    link = models.TextField()
-    filtered = models.BooleanField(default=False)
-    archived = models.BooleanField(default=False)
-    
-    feed = models.ForeignKey(Feed)
-    domain = models.ForeignKey(Domain)
-    
-    tags = TaggableManager()
-
-    def item_type(self):
-        if self.archived:
-            return 'archived-item'
-        if self.filtered:
-            return 'filtered-item'
-        return 'simple-item'
-
-    #def domain(self):
-    #    parsed = urlparse.urlsplit(self.link)
-    #    return parsed.netloc.encode('utf-8')
-
-    def __unicode__(self):
-        return '%s' % (self.title)
-
 class Place(gismodels.Model):
     """
     Spatial model for Countries.
@@ -108,6 +77,20 @@ class Place(gismodels.Model):
     def __unicode__(self):
         return '%s' % (self.name)
         
+class Item(models.Model):
+    """
+    Model for Items.
+    """
+    # attributes
+    title = models.CharField(max_length=255)
+    summary = models.TextField()
+    updated = models.DateTimeField(null=True)
+    link = models.TextField()
+    places = models.ManyToManyField(Place, null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s' % (self.title)
+        
 class Tweet(models.Model):
     """
     Model for Tweets.
@@ -116,7 +99,8 @@ class Tweet(models.Model):
     twitter_id = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
     created_at = models.DateTimeField(null=True)
-    username = models.CharField(max_length=255)
+    user_name = models.CharField(max_length=255)
+    screen_name = models.URLField(max_length=255)
     filtered = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
     places = models.ManyToManyField(Place, null=True, blank=True)
@@ -176,6 +160,7 @@ class Search(gismodels.Model):
     geometry = gismodels.MultiPolygonField(srid=4326)
     keywords = models.ManyToManyField(Keyword, null=True, blank=True)
     tweets = models.ManyToManyField(Tweet, null=True, blank=True)
+    items = models.ManyToManyField(Item, null=True, blank=True)
     is_enabled = models.BooleanField()
     objects = gismodels.GeoManager()
 

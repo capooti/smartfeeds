@@ -18,8 +18,8 @@ class TweetAdmin(admin.ModelAdmin):
 
     model = Tweet
     list_per_page = 20
-    list_display = ['twitter_id', 'status', 'username', 'the_places', 'the_searches']
-    search_fields = ['twitter_id', 'status', 'username']
+    list_display = ['twitter_id', 'status', 'user_name', 'the_places', 'the_searches']
+    search_fields = ['twitter_id', 'status', 'user_name']
     
     def the_tags(self, obj):
         return "%s" % (obj.tags.all(), )
@@ -29,9 +29,8 @@ class ItemAdmin(admin.ModelAdmin):
 
     model = Item
     list_per_page = 20
-    list_display = ['title', 'feed', 'feed_class', 'updated', 'filtered', 'archived', 'the_tags']
+    list_display = ['title', 'updated',]
     search_fields = ['title', 'summary']
-    list_filter = ['filtered', 'archived', 'feed']
     date_hierarchy = 'updated'
 
     def feed_class(self, obj):
