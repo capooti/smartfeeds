@@ -46,17 +46,17 @@ class Command(BaseCommand):
         api = tweepy.API(auth)
         #Tweet.objects.all().delete()
         #Place.objects.all().delete()
-        
-        # removed orphan places (TODO implement this in signals)
-        for p in Place.objects.all():
-            if(p.tweet_set.all().count()==0):
-                p.delete()
         # removed orphan tweets (TODO implement this in signals)
         for t in Tweet.objects.all():
             if (t.search_set.all().count()==0):
                 t.delete()
             if(t.places.all().count()==0):
                 t.delete()
+        # removed orphan places (TODO implement this in signals)
+        for p in Place.objects.all():
+            if(p.tweet_set.all().count()==0):
+                p.delete()
+        # start searching
         for search in Search.objects.all():
             if search.is_enabled:
                 for keyword in search.keywords.all():
