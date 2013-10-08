@@ -52,7 +52,7 @@
 
         map.addLayer(marker_{{ place.id }});
         var popup = "<strong><a href='{% url "place-detail" place.slug %}'>{{ place.name|linebreaksbr }}</a></strong>";
-        popup = popup + "<br /><a href='https://twitter.com/{{ t.place.tweet_set.all.0.username }}'>@{{ place.tweet_set.all.0.username }}</a>,/{{ place.tweet_set.all.0.created_at }}<br />";
+        popup = popup + "<br /><a href='https://twitter.com/{{ place.tweet_set.all.0.screen_name }}'>@{{ place.tweet_set.all.0.screen_name }}</a>, {{ place.tweet_set.all.0.created_at }}<br />";
         popup = popup + "<br />{{ place.tweet_set.all.0.status|linebreaksbr }}";
         
         {% if place.tweet_set.all.count > 1 %}
