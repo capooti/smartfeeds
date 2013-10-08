@@ -159,7 +159,7 @@ LOGGING = {
 }
 
 # in the databays news items older than DAYS_TO_KEEP days will be removed
-DAYS_TO_KEEP = 30
+DAYS_TO_KEEP = 7
 
 # API keys
 GEOIP_PATH='/home/capooti/data/geoip'

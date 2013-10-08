@@ -86,7 +86,7 @@ class Item(models.Model):
     summary = models.TextField()
     updated = models.DateTimeField(null=True)
     link = models.TextField()
-    places = models.ManyToManyField(Place, null=True, blank=True)
+    #places = models.ManyToManyField(Place, null=True, blank=True)
 
     def __unicode__(self):
         return '%s' % (self.title)

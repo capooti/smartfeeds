@@ -50,8 +50,9 @@ class Command(BaseCommand):
         for t in Tweet.objects.all():
             if (t.search_set.all().count()==0):
                 t.delete()
-            if(t.places.all().count()==0):
-                t.delete()
+            else:
+                if(t.places.all().count()==0):
+                    t.delete()
         # removed orphan places (TODO implement this in signals)
         for p in Place.objects.all():
             if(p.tweet_set.all().count()==0):
