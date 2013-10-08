@@ -53,6 +53,8 @@ class Command(BaseCommand):
                 p.delete()
         # removed orphan tweets (TODO implement this in signals)
         for t in Tweet.objects.all():
+            if (t.search_set.all().count()==0):
+                t.delete()
             if(t.places.all().count()==0):
                 t.delete()
         for search in Search.objects.all():
