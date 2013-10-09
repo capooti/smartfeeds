@@ -24,11 +24,20 @@
 
 * Then run ogr2ogr to import the .csv file to PostGIS::
 
-    $ ogr2ogr -f PostgreSQL PG:"dbname='smartfeeds' host='localhost' port='5432' user='myuser' password='mypassword'" geonames.csv geonames -where "FEATCLASS='PPL'"
+    $ ogr2ogr -f PostgreSQL PG:"dbname='smartfeeds' host='localhost' port='5432' user='myuser' password='mypassword'" geonames.csv geonames
+    
+* For perfomance reasons::
+
+    smartfeeds=# delete from geonames where length(asciiname)>255;
+    smartfeeds=# alter table geonames alter column asciiname type character varying(255);
+
+* In case you want to limit the search just to populated places::
+
+    smartfeeds=# select * INTO geonames from geonames_full where featcode='PPL';
     
 * Create the index to speed the text search::
 
-    CREATE INDEX geonames_lower_idx
+    smartfeeds=# CREATE INDEX geonames_lower_idx
       ON geonames
       USING btree
       (lower(asciiname::text) COLLATE pg_catalog."default" );
