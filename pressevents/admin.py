@@ -18,6 +18,7 @@ class EventAdmin(admin.ModelAdmin):
         'num_articles', 'action_geotype', 'eventcode', 'keyword']
     list_filter = ['keyword',]
     search_fields = ['url', 'eventcode__description']
+    date_hierarchy = 'date'
     
 # register for admin
 admin.site.register(Event, EventAdmin)

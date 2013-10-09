@@ -71,6 +71,7 @@
         var markerEvent_{{ e.id }} = new L.Marker(markerEventPlace_{{ e.id }}, {icon: eventIcon});
         map.addLayer(markerEvent_{{ e.id }});
         var popup_event = "<strong>{{ e.eventcode.description }}</strong>";
+        popup_event = popup_event + "<br />{{ e.date }}";
         popup_event = popup_event + "<br />Mentions: {{ e.num_mentions }}, Sources: {{ e.num_sources }}, Articles: {{ e.num_articles }}";
         popup_event = popup_event + "<br /><a href='{{ e.url }}'>{{ e.url|truncatechars:50 }}</a>"
         markerEvent_{{ e.id }}.bindPopup(popup_event);

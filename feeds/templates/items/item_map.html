@@ -35,7 +35,7 @@
                 <ul>
                 {% for e in events %}
                     <li>
-                    {{ e.eventcode.description }}: <a href="{{ e.url }}">{{ e.url|truncatechars:25 }}</a>,
+                    {{ e.date }}, {{ e.eventcode.description }}: <a href="{{ e.url }}">{{ e.url|truncatechars:25 }}</a>,
                     </li>
                 {% endfor %}
                 </ul>
